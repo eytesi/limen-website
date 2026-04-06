@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import nodemailer from "nodemailer";
 
 interface ContactFormData {
   name: string;
@@ -8,22 +9,17 @@ interface ContactFormData {
   message: string;
 }
 
-/**
- * POST /api/contact
- * Handles contact form submissions
- *
- * IMPORTANT: Configure email service before deploying
- * Options:
- * - SendGrid: https://sendgrid.com/
- * - Mailgun: https://www.mailgun.com/
- * - Resend: https://resend.com/
- * - Gmail with nodemailer
- */
+const SMTP_HOST = process.env.SMTP_HOST;
+const SMTP_PORT = Number(process.env.SMTP_PORT || 587);
+const SMTP_USER = process.env.SMTP_USER;
+const SMTP_PASS = process.env.SMTP_PASS;
+const EMAIL_TO = process.env.EMAIL_TO || "ivo@limen.agency";
+const EMAIL_FROM = process.env.EMAIL_FROM || "noreply@limen.agency";
+
 export async function POST(request: NextRequest) {
   try {
     const data: ContactFormData = await request.json();
 
-    // Validate required fields
     if (!data.name || !data.email || !data.message) {
       return NextResponse.json(
         { error: "Missing required fields" },
@@ -31,7 +27,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {
       return NextResponse.json(
@@ -40,15 +35,31 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // TODO: Integrate with email service
-    // Example with SendGrid:
-    /*
-    const sgMail = require('@sendgrid/mail');
-    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    
-    const msg = {
-      to: 'ivo@limen.agency',
-      from: 'noreply@limen.agency',
+    if (!SMTP_HOST || !SMTP_USER || !SMTP_PASS) {
+      console.error("SMTP credentials are missing");
+      return NextResponse.json(
+        {
+          error:
+            "Email service is not configured yet. Please set SMTP_HOST, SMTP_USER, and SMTP_PASS.",
+        },
+        { status: 500 }
+      );
+    }
+
+    const transporter = nodemailer.createTransport({
+      host: SMTP_HOST,
+      port: SMTP_PORT,
+      secure: SMTP_PORT === 465,
+      auth: {
+        user: SMTP_USER,
+        pass: SMTP_PASS,
+      },
+    });
+
+    await transporter.sendMail({
+      from: EMAIL_FROM,
+      to: EMAIL_TO,
+      replyTo: data.email,
       subject: `Nuevo mensaje de ${data.name} - ${data.service}`,
       html: `
         <h2>Nuevo mensaje de contacto</h2>
@@ -59,16 +70,8 @@ export async function POST(request: NextRequest) {
         <p><strong>Mensaje:</strong></p>
         <p>${data.message.replace(/\n/g, '<br>')}</p>
       `,
-      replyTo: data.email,
-    };
+    });
 
-    await sgMail.send(msg);
-    */
-
-    // For now, just log the data
-    console.log("Contact form submission:", data);
-
-    // Return success response
     return NextResponse.json(
       {
         success: true,

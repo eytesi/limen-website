@@ -15,6 +15,7 @@ export default function Contacto() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -30,19 +31,38 @@ export default function Contacto() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the form data to your backend
-    console.log(formData);
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormData({
-        name: "",
-        email: "",
-        company: "",
-        service: "branding",
-        message: "",
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-      setSubmitted(false);
-    }, 3000);
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Error sending message');
+      }
+
+      setSubmitted(true);
+      setFormData({
+        name: '',
+        email: '',
+        company: '',
+        service: 'branding',
+        message: '',
+      });
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : 'No se pudo enviar el mensaje. Intenta nuevamente.'
+      );
+    }
   };
 
   return (
