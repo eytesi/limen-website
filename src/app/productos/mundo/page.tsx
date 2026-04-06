@@ -5,11 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-export const metadata = {
-  title: "Mundo - Solo diseño web | Limen",
-  description: "Diseño web profesional para marcas que ya tienen identidad definida. Desde $600 USD.",
-};
-
 export default function MundoPage() {
   return (
     <main className="min-h-screen bg-limen-white">

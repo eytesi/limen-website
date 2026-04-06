@@ -5,11 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-export const metadata = {
-  title: "Territorio - Identidad + presencia digital | Limen",
-  description: "Identidad de marca completa + presencia digital. Construye tu territorio online desde $1,800 USD.",
-};
-
 export default function TerritorioPage() {
   return (
     <main className="min-h-screen bg-limen-white">

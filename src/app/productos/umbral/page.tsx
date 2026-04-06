@@ -5,11 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-export const metadata = {
-  title: "Umbral - Identidad de marca completa | Limen",
-  description: "El momento en que tu marca cruza de invisible a visible. Identidad de marca completa desde $800 USD.",
-};
-
 export default function UmbralPage() {
   return (
     <main className="min-h-screen bg-limen-white">
