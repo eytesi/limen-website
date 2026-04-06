@@ -11,7 +11,7 @@ export default function TerritorioPage() {
       <Navigation />
 
       {/* Hero Section */}
-      <section className="relative py-20 bg-limen-cream pattern-fabric-2">
+      <section className="relative pt-32 pb-20 bg-limen-cream pattern-fabric-2">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
