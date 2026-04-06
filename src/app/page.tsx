@@ -54,7 +54,7 @@ export default function Home() {
                 "Manual de identidad",
                 "Aplicaciones clave",
               ]}
-              href="/productos#umbral"
+              href="/productos/umbral"
             />
             <ProductCard
               title="Territorio"
@@ -69,7 +69,7 @@ export default function Home() {
                 "Sistema de patterns",
                 "Manual extendido",
               ]}
-              href="/productos#territorio"
+              href="/productos/territorio"
             />
             <ProductCard
               title="Mundo"
@@ -82,7 +82,7 @@ export default function Home() {
                 "CMS básico opcional",
                 "Una ronda de revisiones",
               ]}
-              href="/productos#mundo"
+              href="/productos/mundo"
             />
           </div>
         </div>
