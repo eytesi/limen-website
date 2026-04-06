@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link rel="icon" href="/limenlogo.png" type="image/png" />
       </head>
       <body className="antialiased">{children}</body>
     </html>
