@@ -232,10 +232,10 @@ export default function Contacto() {
                 WhatsApp
               </h3>
               <a
-                href="https://wa.me/1234567890"
+                href="https://wa.me/5491169778773"
                 className="text-sm font-light text-limen-accent hover:text-limen-black transition-colors"
               >
-                +1 (555) 123-4567
+                +54 11 6977-8773
               </a>
             </motion.div>
 
@@ -255,8 +255,9 @@ export default function Contacto() {
                   Instagram
                 </a>
                 <a
-                  href="#"
+                  href="https://www.linkedin.com/company/limenagency"
                   className="text-xs font-serif uppercase tracking-wider text-limen-accent hover:text-limen-black transition-colors"
+                  target="_blank" rel="noopener noreferrer"
                 >
                   LinkedIn
                 </a>
