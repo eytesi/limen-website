@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
     
     const msg = {
-      to: 'hola@limen.com',
-      from: 'noreply@limen.com',
+      to: 'ivo@limen.agency',
+      from: 'noreply@limen.agency',
       subject: `Nuevo mensaje de ${data.name} - ${data.service}`,
       html: `
         <h2>Nuevo mensaje de contacto</h2>

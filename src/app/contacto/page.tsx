@@ -196,10 +196,10 @@ export default function Contacto() {
                 Email
               </h3>
               <a
-                href="mailto:hola@limen.com"
+                href="mailto:ivo@limen.agency"
                 className="text-sm font-light text-limen-accent hover:text-limen-black transition-colors"
               >
-                hola@limen.com
+                ivo@limen.agency
               </a>
             </motion.div>
 

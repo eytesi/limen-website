@@ -7,7 +7,7 @@ export const SITE_CONFIG = {
   description: "Tu mundo, visible",
   tagline: "Branding desde el corazón, diseño para el mundo",
   contact: {
-    email: "hola@limen.com",
+    email: "ivo@limen.agency",
     whatsapp: "+1 (555) 123-4567",
   },
 };
