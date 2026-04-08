@@ -114,12 +114,12 @@ export default function SobreLimen() {
             Un equipo multidisciplinario apasionado por llevar mundos invisibles
             a la visibilidad
           </p>
-          <a
-            href="/contacto"
-            className="inline-block px-8 py-3 bg-limen-accent text-limen-white rounded-lg font-serif font-semibold uppercase text-sm tracking-wider hover:scale-105 transition-transform"
-          >
-            Conoce al equipo
-          </a>
+            <a
+              href="/sobre-limen/equipo"
+              className="mt-8 px-6 py-3 bg-limen-accent text-white rounded-lg font-serif text-lg hover:bg-limen-black transition-colors inline-block text-center"
+            >
+              Conocé al equipo
+            </a>
         </div>
       </section>
 

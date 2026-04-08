@@ -156,9 +156,14 @@ body {
 /* Glassmorphism Effect */
 .glass {
   backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px); /* Soporte Safari */
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
+/* Los siguientes at-rules y @apply son de Tailwind CSS. Si ves errores en el editor, ignóralos si el sitio compila bien. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* Text Selections */
 ::selection {
