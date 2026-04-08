@@ -42,7 +42,7 @@ export default function SobreLimen() {
 
             <div>
               <h2 className="font-title-caps mb-6">Nuestra Misión</h2>
-              <p className="text-3xl font-display font-bold text-limen-black mb-4">
+              <p className="font-title-caps text-3xl font-bold text-limen-black mb-4">
                 Tu mundo, visible
               </p>
               <p className="text-lg font-light leading-relaxed text-limen-black/80">
