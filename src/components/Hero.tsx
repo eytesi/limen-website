@@ -60,7 +60,7 @@ export function Hero({
         animate="visible"
       >
         <motion.h1
-          className="font-title-caps text-2xl mb-6 leading-tight"
+          className="font-title-caps text-3xl mb-6 leading-tight"
           variants={itemVariants}
         >
           {title}

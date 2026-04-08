@@ -23,7 +23,7 @@ export default function TerritorioPage() {
                 Producto · Identidad + presencia digital
               </span>
             </div>
-            <h1 className="font-title-caps text-2xl mb-6">
+            <h1 className="font-title-caps text-3xl mb-6">
               Territorio
             </h1>
             <p className="font-subtitle-italic text-2xl text-limen-black/70 mb-8">

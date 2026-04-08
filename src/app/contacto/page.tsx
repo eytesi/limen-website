@@ -75,7 +75,7 @@ export default function Contacto() {
 
         <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 z-10 text-center">
           <motion.h1
-            className="font-title-caps text-hero mb-6"
+            className="font-title-caps text-3xl mb-6"
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}

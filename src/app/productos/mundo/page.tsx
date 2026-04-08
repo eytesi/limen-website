@@ -23,7 +23,7 @@ export default function MundoPage() {
                 Producto · Diseño web
               </span>
             </div>
-            <h1 className="font-title-caps text-2xl mb-6">
+            <h1 className="font-title-caps text-3xl mb-6">
               Mundo
             </h1>
             <p className="font-subtitle-italic text-2xl text-limen-black/70 mb-8">
