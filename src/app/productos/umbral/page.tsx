@@ -23,7 +23,7 @@ export default function UmbralPage() {
                 Producto · Identidad de marca completa
               </span>
             </div>
-            <h1 className="font-title-caps text-5xl md:text-6xl mb-6">
+            <h1 className="font-title-caps text-2xl mb-6">
               Umbral
             </h1>
             <p className="font-subtitle-italic text-2xl text-limen-black/70 mb-8">

@@ -8,7 +8,7 @@ export const metadata = {
 export default function EquipoPage() {
   return (
     <main className="max-w-2xl mx-auto py-16 px-4">
-      <h1 className="text-4xl font-serif font-bold mb-8 text-center">
+      <h1 className="text-2xl font-serif font-bold mb-8 text-center">
         Nuestro Equipo
       </h1>
 
