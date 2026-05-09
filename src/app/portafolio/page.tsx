@@ -11,8 +11,8 @@ const projects = [
   {
     title: "La Leña",
     category: "Web Design · Restaurante",
-    image: "/portfolio/laleña.jpg",
-    demo: "/demos/laleña.html",
+    image: "/portfolio/lalena.jpg",
+    demo: "/demos/lalena.html",
     description: "Sitio para restaurante patagónico en Ushuaia. Carta con tabs, horarios y reservas por WhatsApp.",
   },
   {
