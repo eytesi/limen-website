@@ -5,7 +5,7 @@ import { ProductCard } from "@/components/ProductCard";
 
 export const metadata = {
   title: "Productos - Limen",
-  description: "Tres formas de cruzar el umbral: Umbral, Territorio, Mundo",
+  description: "Diseño web a medida. Tu negocio, visible.",
 };
 
 export default function Productos() {
@@ -14,60 +14,75 @@ export default function Productos() {
       <Navigation />
 
       <Hero
-        title="Tres formas de cruzar el umbral"
-        subtitle="Elige el producto que necesitas para hacerlo visible"
+        title="Tu mundo, visible"
+        subtitle="Empezamos por donde más se necesita: un sitio web que represente lo que sos"
         pattern="fabric-2"
       />
 
       {/* Product Grid */}
       <section className="py-20 bg-limen-cream pattern-fabric-3 relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-            <ProductCard
-              title="Umbral"
-              description="Identidad de marca completa para emprendimientos, artistas y proyectos nuevos"
-              price="desde $800 USD"
-              features={[
-                "Sesión de descubrimiento — narrativa, valores, mundo de marca",
-                "Naming o refinamiento del nombre existente",
-                "Logotipo + sistema de marca (colores, tipografía, patterns)",
-                "Manual de identidad visual básico",
-                "Aplicaciones clave (perfil social, tarjeta, membrete)",
-              ]}
-              badge="Proyecto único"
-              href="/productos/umbral"
-            />
 
-            <ProductCard
-              title="Territorio"
-              description="Identidad + presencia digital completa para consolidar tu marca"
-              price="desde $1,800 USD"
-              features={[
-                "Todo lo de Umbral",
-                "Estrategia de contenido y tono de voz",
-                "Diseño y desarrollo web (hasta 5 páginas)",
-                "Sistema de patterns y texturas personalizado",
-                "Kit de activos para redes sociales",
-                "Manual de identidad extendido",
-              ]}
-              badge="más completo"
-              highlight
-              href="/productos/territorio"
-            />
-
+          {/* Mundo — featured solo */}
+          <div className="max-w-lg mx-auto mb-12">
+            <p className="text-center text-xs font-serif uppercase tracking-widest text-limen-accent mb-6 opacity-70">
+              — Disponible ahora —
+            </p>
             <ProductCard
               title="Mundo"
-              description="Diseño web para marcas con identidad definida"
-              price="desde $600 USD"
+              description="Tu negocio merece un sitio que lo represente. Diseño y desarrollo web completo, mobile-first, listo para subir."
+              price="$100 USD · $150.000 ARS"
               features={[
-                "Diseño en Figma + desarrollo (hasta 4 páginas)",
-                "Versión mobile responsive",
-                "Integración de CMS básico si se necesita",
-                "Una ronda de revisiones",
+                "Sitio web completo — hasta 5 secciones",
+                "Diseño mobile-first, 100% responsive",
+                "Identidad visual aplicada al sitio",
+                "WhatsApp, redes y mapas integrados",
+                "Entrega en 7 días hábiles",
+                "Una ronda de revisiones incluida",
               ]}
-              badge="Proyecto único"
+              badge="Disponible ahora"
+              highlight
               href="/productos/mundo"
             />
+          </div>
+
+          {/* Coming soon row */}
+          <div className="mt-16 pt-12 border-t border-limen-black/10">
+            <p className="text-center text-xs font-serif uppercase tracking-widest text-limen-black/40 mb-8">
+              — Próximamente en Limen —
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+              <ProductCard
+                title="Umbral"
+                description="Identidad de marca completa para emprendimientos, artistas y proyectos nuevos."
+                features={[
+                  "Sesión de descubrimiento — narrativa, valores, mundo de marca",
+                  "Naming o refinamiento del nombre existente",
+                  "Logotipo + sistema de marca (colores, tipografía, patterns)",
+                  "Manual de identidad visual básico",
+                  "Aplicaciones clave (perfil social, tarjeta, membrete)",
+                ]}
+                badge="Próximamente"
+                comingSoon
+                href="/productos/umbral"
+              />
+
+              <ProductCard
+                title="Territorio"
+                description="Identidad sólida + presencia digital completa para consolidar tu marca."
+                features={[
+                  "Todo lo de Umbral",
+                  "Estrategia de contenido y tono de voz",
+                  "Diseño y desarrollo web (hasta 5 páginas)",
+                  "Sistema de patterns y texturas personalizado",
+                  "Kit de activos para redes sociales",
+                  "Manual de identidad extendido",
+                ]}
+                badge="Próximamente"
+                comingSoon
+                href="/productos/territorio"
+              />
+            </div>
           </div>
 
           {/* Add-ons Section */}
@@ -131,33 +146,27 @@ export default function Productos() {
             {[
               {
                 number: "01",
-                title: "Descubrimiento",
+                title: "Consulta",
                 description:
-                  "Conversamos profundamente sobre tu marca, visión, mercado y objetivos.",
+                  "Me contás qué necesitás, qué tiene tu negocio y a quién le hablás. Sin formularios raros.",
               },
               {
                 number: "02",
-                title: "Estrategia",
+                title: "Propuesta",
                 description:
-                  "Desarrollamos la arquitectura visual y comunicacional de tu marca.",
+                  "En 24hs te mando una propuesta con estructura, referencias y precio final.",
               },
               {
                 number: "03",
                 title: "Diseño",
                 description:
-                  "Creamos los elementos visuales: logo, paleta, tipografía, patterns.",
+                  "Arrancamos. Diseño, desarrollo y revisiones — todo en comunicación directa.",
               },
               {
                 number: "04",
-                title: "Refinamiento",
-                description:
-                  "Iteramos juntos hasta que sea exactamente lo que necesitas.",
-              },
-              {
-                number: "05",
                 title: "Entrega",
                 description:
-                  "Recibes todo documentado, sistematizado y listo para usar.",
+                  "En 7 días hábiles tu sitio está listo, subido y funcionando.",
               },
             ].map((step, idx) => (
               <div key={idx} className="flex gap-6 items-start">
@@ -180,16 +189,16 @@ export default function Productos() {
       <section className="py-32 bg-limen-black text-limen-white pattern-geometric-mix relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-title-caps text-limen-white mb-6">
-            ¿Cuál es tu umbral?
+            ¿Querés un sitio que represente lo que sos?
           </h2>
           <p className="font-subtitle-italic text-xl text-limen-white/80 mb-8">
-            Empecemos el proceso de llevar tu mundo a la visibilidad
+            $100 USD · $150.000 ARS · Entrega en 7 días
           </p>
           <a
             href="/contacto"
             className="inline-block px-10 py-4 bg-limen-accent text-limen-white rounded-lg font-serif font-semibold uppercase text-sm tracking-wider hover:scale-105 transition-transform"
           >
-            Iniciar un proyecto
+            Arranquemos
           </a>
         </div>
       </section>
@@ -198,3 +207,5 @@ export default function Productos() {
     </main>
   );
 }
+
+
