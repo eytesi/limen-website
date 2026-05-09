@@ -30,11 +30,14 @@ export default function MundoPage() {
               Un espacio digital construido para habitar tu identidad — no para contradecirla.
             </p>
             <div className="mb-8">
-              <p className="text-4xl font-serif font-bold tracking-wider text-limen-black">
+              <p className="text-2xl font-serif font-light tracking-wider text-limen-black/40 line-through mb-1">
                 desde $600 USD
               </p>
-              <p className="text-sm font-serif font-light uppercase tracking-widest text-limen-black/60 mt-2">
-                · proyecto único · pago 50% adelantado
+              <p className="text-4xl font-serif font-bold tracking-wider text-limen-black">
+                $100 USD · $150.000 ARS
+              </p>
+              <p className="text-sm font-serif font-light uppercase tracking-widest text-limen-accent mt-2">
+                · precio de lanzamiento · entrega en 7 días
               </p>
             </div>
           </motion.div>
@@ -232,7 +235,7 @@ export default function MundoPage() {
             <div className="space-y-8">
               <div className="bg-limen-white p-6 rounded-lg border border-limen-black/10">
                 <h3 className="font-serif font-semibold mb-3">¿Cuánto tiempo toma el proyecto?</h3>
-                <p className="font-light text-limen-black/70">Entre 3 y 4 semanas desde el briefing hasta el sitio live. El tiempo varía según la velocidad de aprobación de tu parte y si los contenidos están listos al inicio.</p>
+                <p className="font-light text-limen-black/70">7 días hábiles desde el briefing hasta el sitio live. Con los contenidos listos al inicio, cumplimos ese plazo.</p>
               </div>
               <div className="bg-limen-white p-6 rounded-lg border border-limen-black/10">
                 <h3 className="font-serif font-semibold mb-3">¿Necesito tener todos los textos e imágenes listos?</h3>
@@ -244,7 +247,7 @@ export default function MundoPage() {
               </div>
               <div className="bg-limen-white p-6 rounded-lg border border-limen-black/10">
                 <h3 className="font-serif font-semibold mb-3">¿Cuántas revisiones están incluidas?</h3>
-                <p className="font-light text-limen-black/70">Una ronda de revisiones sobre el diseño en Figma y una ronda sobre el desarrollo. Revisiones adicionales tienen un costo de $80 USD por ronda.</p>
+                <p className="font-light text-limen-black/70">Una ronda de revisiones incluida en el precio. Revisiones adicionales se coordinan por separado.</p>
               </div>
               <div className="bg-limen-white p-6 rounded-lg border border-limen-black/10">
                 <h3 className="font-serif font-semibold mb-3">¿El sitio va a ser rápido y estar optimizado para buscadores?</h3>

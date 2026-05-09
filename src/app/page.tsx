@@ -38,15 +38,32 @@ export default function Home() {
           <div className="text-center mb-16">
             <h2 className="font-title-caps mb-4">Lo que hacemos</h2>
             <p className="font-subtitle-italic text-limen-black/70 text-xl">
-              Tres formas de cruzar el umbral
+              Diseño web para negocios reales
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="max-w-lg mx-auto mb-10">
+            <ProductCard
+              title="Mundo"
+              description="Tu negocio merece un sitio que lo represente. Diseño y desarrollo web completo, mobile-first, listo para subir."
+              price="$100 USD · $150.000 ARS"
+              features={[
+                "Sitio web completo — hasta 5 secciones",
+                "Diseño mobile-first, 100% responsive",
+                "WhatsApp, redes y mapas integrados",
+                "Entrega en 7 días hábiles",
+                "Una ronda de revisiones incluida",
+              ]}
+              badge="Disponible ahora"
+              highlight
+              href="/productos/mundo"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
             <ProductCard
               title="Umbral"
-              description="Identidad de marca completa"
-              price="desde $800 USD"
+              description="Identidad de marca completa para emprendimientos y proyectos nuevos."
               features={[
                 "Sesión de descubrimiento",
                 "Naming o refinamiento",
@@ -54,14 +71,13 @@ export default function Home() {
                 "Manual de identidad",
                 "Aplicaciones clave",
               ]}
+              badge="Próximamente"
+              comingSoon
               href="/productos/umbral"
             />
             <ProductCard
               title="Territorio"
-              description="Identidad + presencia digital"
-              price="desde $1,800 USD"
-              badge="más completo"
-              highlight
+              description="Identidad sólida + presencia digital completa."
               features={[
                 "Todo lo de Umbral",
                 "Estrategia de contenido",
@@ -69,20 +85,9 @@ export default function Home() {
                 "Sistema de patterns",
                 "Manual extendido",
               ]}
+              badge="Próximamente"
+              comingSoon
               href="/productos/territorio"
-            />
-            <ProductCard
-              title="Mundo"
-              description="Solo diseño web"
-              price="desde $600 USD"
-              features={[
-                "Diseño en Figma",
-                "Desarrollo web",
-                "Versión mobile responsive",
-                "CMS básico opcional",
-                "Una ronda de revisiones",
-              ]}
-              href="/productos/mundo"
             />
           </div>
         </div>
@@ -143,27 +148,27 @@ export default function Home() {
             <div className="grid grid-cols-2 gap-4 place-self-center">
               <div className="bg-limen-accent/10 rounded-lg p-8 text-center">
                 <p className="text-4xl font-serif font-bold text-limen-accent mb-2">
-                  50+
+                  10+
                 </p>
                 <p className="font-light text-sm">Proyectos completados</p>
               </div>
               <div className="bg-limen-accentAlt/10 rounded-lg p-8 text-center">
                 <p className="text-4xl font-serif font-bold text-limen-accentAlt mb-2">
-                  10+
+                  5+
                 </p>
                 <p className="font-light text-sm">Años de experiencia</p>
               </div>
               <div className="bg-limen-accentGold/10 rounded-lg p-8 text-center">
                 <p className="text-4xl font-serif font-bold text-limen-accentGold mb-2">
-                  95%
+                  100%
                 </p>
-                <p className="font-light text-sm">Clientes satisfechos</p>
+                <p className="font-light text-sm">Diseño mobile-first</p>
               </div>
               <div className="bg-limen-black/10 rounded-lg p-8 text-center">
                 <p className="text-4xl font-serif font-bold text-limen-black mb-2">
-                  24/7
+                  7
                 </p>
-                <p className="font-light text-sm">Soporte dedicado</p>
+                <p className="font-light text-sm">Días de entrega</p>
               </div>
             </div>
           </div>
