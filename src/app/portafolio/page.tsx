@@ -4,7 +4,7 @@ import { Hero } from "@/components/Hero";
 
 export const metadata = {
   title: "Portafolio - Limen",
-  description: "Trabajos destacados de branding y diseño web",
+  description: "Trabajos destacados de diseño web",
 };
 
 export default function Portafolio() {
@@ -14,7 +14,7 @@ export default function Portafolio() {
 
       <Hero
         title="Portafolio"
-        subtitle="Trabajos que hicieron mundos visibles"
+        subtitle="Sitios reales, para negocios reales"
         pattern="fabric-2"
       />
 
@@ -24,42 +24,46 @@ export default function Portafolio() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {[
               {
-                title: "Studio Aurora",
-                category: "Branding + Web Design",
+                title: "La Leña",
+                category: "Web Design · Restaurante",
                 image: "pattern-fabric-1",
                 description:
-                  "Identidad visual para studio de fotografía conceptual",
+                  "Sitio para restaurante patagónico en Ushuaia. Carta con tabs, horarios y reservas por WhatsApp.",
               },
               {
-                title: "Verde Vivo",
-                category: "Branding",
+                title: "Miga",
+                category: "Web Design · Panadería",
                 image: "pattern-fabric-2",
-                description: "Marca para emprendimiento de productos ecológicos",
+                description:
+                  "Sitio kawaii para panadería artesanal. Encargos, carta y sección de Instagram integrados.",
               },
               {
-                title: "Nexus Tech",
-                category: "Web Design",
-                image: "pattern-animal",
-                description: "Sitio web para startup de tecnología",
-              },
-              {
-                title: "Artístico Collective",
-                category: "Rediseño de Marca",
+                title: "KRUX",
+                category: "Web Design · Moda",
                 image: "pattern-geometric-mix",
                 description:
-                  "Modernización de galería de arte contemporáneo",
+                  "Sitio streetwear industrial B&W con catálogo por categorías, colecciones y marquee diagonal.",
               },
               {
-                title: "Wellness Co",
-                category: "Branding + Web",
+                title: "CUMBRE",
+                category: "Web Design · Turismo de Nieve",
                 image: "pattern-fabric-3",
-                description: "Identidad para marca de bienestar y meditación",
+                description:
+                  "Sitio de alquiler de equipamiento de nieve. Tarifas, proceso de reserva y catálogo por tipo.",
               },
               {
-                title: "Local Market",
-                category: "E-Commerce Design",
+                title: "ALERO",
+                category: "Web Design · Hotelería",
                 image: "pattern-animal",
-                description: "Plataforma de comercio electrónico local",
+                description:
+                  "Cabañas del sur con loader animado, sección de ventanas geométricas y sistema de reservas.",
+              },
+              {
+                title: "LITORAL",
+                category: "Web Design · Música",
+                image: "pattern-fabric-1",
+                description:
+                  "Portfolio de banda con Spotify embed, tracklist, fechas de tour y tienda de merch integrada.",
               },
             ].map((project, idx) => (
               <div
@@ -86,54 +90,20 @@ export default function Portafolio() {
         </div>
       </section>
 
-      {/* Stats */}
-      <section className="py-20 bg-limen-white pattern-geometric-mix relative">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center">
-            <div>
-              <p className="text-5xl font-serif font-bold text-limen-accent mb-2">
-                50+
-              </p>
-              <p className="font-light text-limen-black/70">
-                Proyectos completados
-              </p>
-            </div>
-            <div>
-              <p className="text-5xl font-serif font-bold text-limen-accentAlt mb-2">
-                40
-              </p>
-              <p className="font-light text-limen-black/70">Clientes felices</p>
-            </div>
-            <div>
-              <p className="text-5xl font-serif font-bold text-limen-accentGold mb-2">
-                10+
-              </p>
-              <p className="font-light text-limen-black/70">Años de trayectoria</p>
-            </div>
-            <div>
-              <p className="text-5xl font-serif font-bold text-limen-black mb-2">
-                ∞
-              </p>
-              <p className="font-light text-limen-black/70">Historias invisibles</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* CTA */}
       <section className="py-32 bg-limen-black text-limen-white pattern-animal relative">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="font-title-caps text-limen-white mb-6">
-            ¿Tu historia podría estar aquí?
+            ¿Tu negocio podría estar aquí?
           </h2>
           <p className="font-subtitle-italic text-xl text-limen-white/80 mb-8">
-            Cuéntanos tu idea y trabajemos juntos en hacerla visible
+            $100 USD · $150.000 ARS · Entrega en 7 días
           </p>
           <a
             href="/contacto"
             className="inline-block px-10 py-4 bg-limen-accent text-limen-white rounded-lg font-serif font-semibold uppercase text-sm tracking-wider hover:scale-105 transition-transform"
           >
-            Empezar proyecto
+            Arranquemos
           </a>
         </div>
       </section>
@@ -142,3 +112,5 @@ export default function Portafolio() {
     </main>
   );
 }
+
+
