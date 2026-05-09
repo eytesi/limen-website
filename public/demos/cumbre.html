@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CUMBRE — Alquiler de Equipamiento de Nieve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --negro:    #050a0f;
+  --carbon:   #0b1218;
+  --grafito:  #121c24;
+  --acero:    #1a2836;
+  --humo:     #7a9ab0;
+  --gris:     #b0c4d4;
+  --blanco:   #e8f4f8;
+  --neon:     #00e5ff;
+  --neon-dim: rgba(0,229,255,0.1);
+  --neon-glow: rgba(0,229,255,0.35);
+  --nieve:    rgba(232,244,248,0.06);
+}
+
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--negro);
+  color: var(--blanco);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ── SNOW PARTICLES ── */
+.snow {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.flake {
+  position: absolute;
+  top: -10px;
+  width: 3px; height: 3px;
+  background: rgba(0,229,255,0.4);
+  border-radius: 50%;
+  animation: fall linear infinite;
+}
+.flake:nth-child(1)  { left: 8%;  animation-duration: 12s; animation-delay: 0s;   width:2px; height:2px; }
+.flake:nth-child(2)  { left: 18%; animation-duration: 16s; animation-delay: 2s;   opacity:0.5; }
+.flake:nth-child(3)  { left: 32%; animation-duration: 11s; animation-delay: 5s;   width:2px; height:2px; opacity:0.3; }
+.flake:nth-child(4)  { left: 48%; animation-duration: 14s; animation-delay: 1s;   }
+.flake:nth-child(5)  { left: 61%; animation-duration: 18s; animation-delay: 3s;   opacity:0.4; }
+.flake:nth-child(6)  { left: 74%; animation-duration: 10s; animation-delay: 7s;   width:2px; height:2px; }
+.flake:nth-child(7)  { left: 87%; animation-duration: 15s; animation-delay: 4s;   opacity:0.3; }
+.flake:nth-child(8)  { left: 93%; animation-duration: 13s; animation-delay: 9s;   width:2px; height:2px; }
+
+@keyframes fall {
+  0%   { transform: translateY(-10px) translateX(0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(100vh) translateX(20px); opacity: 0; }
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(5,10,15,0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0,229,255,0.1);
+}
+
+.nav-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  letter-spacing: 0.14em;
+  color: var(--blanco);
+  text-decoration: none;
+  line-height: 1;
+}
+.nav-logo span { color: var(--neon); }
+
+.nav-right { display: flex; align-items: center; gap: 0.6rem; }
+
+.nav-tag {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--humo);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1px solid rgba(0,229,255,0.2);
+  padding: 0.4rem 0.75rem;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+.nav-tag:active { color: var(--neon); border-color: var(--neon); }
+
+.nav-cta {
+  background: var(--neon);
+  color: var(--negro);
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.9rem;
+  text-decoration: none;
+  font-weight: 700;
+  transition: box-shadow 0.15s;
+}
+.nav-cta:active { box-shadow: 0 0 20px var(--neon-glow); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 1.25rem 0;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg, #050a0f 0%, #071420 60%, #0b1830 100%);
+}
+
+/* Mountain silhouette */
+.hero-mountain {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 45%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.12;
+}
+
+.hero-scan {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg, transparent, transparent 3px,
+    rgba(0,229,255,0.012) 3px, rgba(0,229,255,0.012) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hero-ticker {
+  position: absolute;
+  top: 90px; right: 1.25rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--neon);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  opacity: 0.6;
+  z-index: 2;
+}
+
+.hero-content { position: relative; z-index: 2; }
+
+.hero-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--neon);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 18px; height: 1px;
+  background: var(--neon);
+  flex-shrink: 0;
+}
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 20vw, 160px);
+  letter-spacing: 0.04em;
+  line-height: 0.88;
+  color: var(--blanco);
+}
+
+.hero-title-ice {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(72px, 20vw, 160px);
+  letter-spacing: 0.04em;
+  line-height: 0.88;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0,229,255,0.25);
+}
+
+.hero-neon-line {
+  height: 2px;
+  background: var(--neon);
+  margin: 1.25rem 0 0;
+  box-shadow: 0 0 16px var(--neon-glow), 0 0 40px rgba(0,229,255,0.15);
+  position: relative;
+  z-index: 2;
+}
+
+.hero-bottom {
+  background: rgba(11,18,24,0.95);
+  border-top: 1px solid rgba(0,229,255,0.08);
+  padding: 1.1rem 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-stat {
+  text-align: center;
+  padding: 0.25rem;
+  border-right: 1px solid rgba(0,229,255,0.06);
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: var(--neon);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  display: block;
+  text-shadow: 0 0 12px var(--neon-glow);
+}
+.hero-stat-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--humo);
+  margin-top: 0.15rem;
+  line-height: 1.3;
+}
+
+/* ── DIAGONAL MARQUEE ── */
+.diagonal-wrap {
+  position: relative;
+  height: 72px;
+  overflow: hidden;
+  background: var(--carbon);
+}
+
+.diagonal-strip {
+  position: absolute;
+  left: -10%; right: -10%;
+  top: 50%;
+  transform: translateY(-50%) rotate(-2.5deg);
+  background: var(--neon);
+  padding: 0.65rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.diagonal-strip-ice {
+  background: transparent;
+  border-top: 1.5px solid rgba(0,229,255,0.5);
+  border-bottom: 1.5px solid rgba(0,229,255,0.5);
+}
+
+.diagonal-track {
+  display: inline-flex;
+  animation: marquee 20s linear infinite;
+}
+.diagonal-track-rev {
+  animation-direction: reverse;
+  animation-duration: 26s;
+}
+
+.diagonal-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.75rem;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 17px;
+  letter-spacing: 0.14em;
+  color: var(--negro);
+}
+.diagonal-strip-ice .diagonal-item { color: var(--neon); font-size: 15px; }
+.diagonal-sep { opacity: 0.35; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── SECTION UTIL ── */
+.section-eyebrow {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--neon);
+  margin-bottom: 0.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.section-eyebrow::before {
+  content: '';
+  width: 16px; height: 1px;
+  background: var(--neon);
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(38px, 10vw, 68px);
+  letter-spacing: 0.06em;
+  color: var(--blanco);
+  line-height: 0.92;
+  margin-bottom: 1rem;
+}
+
+/* ── EQUIPAMIENTO ── */
+.equipo-section {
+  padding: 4rem 1.25rem;
+  background: var(--negro);
+  position: relative;
+}
+
+.equipo-tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin: 1.75rem 0;
+}
+.equipo-tabs::-webkit-scrollbar { display: none; }
+
+.eq-tab {
+  padding: 0.55rem 1.1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--humo);
+  background: var(--grafito);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  font-weight: 400;
+  border-bottom: 2px solid transparent;
+}
+.eq-tab.active {
+  color: var(--neon);
+  border-bottom-color: var(--neon);
+  background: var(--acero);
+}
+
+.eq-grid { display: none; }
+.eq-grid.active {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+.eq-card {
+  background: var(--grafito);
+  position: relative;
+  overflow: hidden;
+  transition: background 0.15s;
+}
+.eq-card:active { background: var(--acero); }
+
+.eq-card-top {
+  aspect-ratio: 4/3;
+  background: var(--carbon);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 44px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ice grid overlay */
+.eq-card-top::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.eq-emoji { position: relative; z-index: 1; filter: grayscale(0.7); opacity: 0.55; }
+
+.eq-corner {
+  position: absolute;
+  top: 0; left: 0;
+  width: 28px; height: 2px;
+  background: var(--neon);
+  box-shadow: 0 0 8px var(--neon-glow);
+  z-index: 2;
+}
+.eq-corner::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 2px; height: 28px;
+  background: var(--neon);
+  box-shadow: 0 0 8px var(--neon-glow);
+}
+
+.eq-status {
+  position: absolute;
+  top: 0.6rem; right: 0.6rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  z-index: 2;
+}
+.eq-status.disponible { background: var(--neon); color: var(--negro); }
+.eq-status.limitado { background: rgba(255,165,0,0.9); color: var(--negro); }
+
+.eq-info { padding: 0.85rem; }
+.eq-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 20px;
+  letter-spacing: 0.07em;
+  color: var(--blanco);
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+.eq-desc {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--humo);
+  letter-spacing: 0.06em;
+  line-height: 1.6;
+  margin-bottom: 0.5rem;
+}
+.eq-price-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+.eq-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  color: var(--neon);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 10px var(--neon-glow);
+  line-height: 1;
+}
+.eq-price-unit {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: var(--humo);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding-bottom: 0.2rem;
+}
+
+/* ── COMO FUNCIONA ── */
+.proceso-section {
+  padding: 4rem 1.25rem;
+  background: var(--carbon);
+}
+
+.proceso-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2rem;
+}
+
+.paso {
+  background: var(--grafito);
+  padding: 1.5rem;
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.15s;
+}
+
+.paso::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--neon);
+  opacity: 0;
+  transition: opacity 0.2s;
+  box-shadow: 0 0 8px var(--neon-glow);
+}
+.paso:hover::before { opacity: 1; }
+
+.paso-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 42px;
+  color: rgba(0,229,255,0.15);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  flex-shrink: 0;
+  width: 48px;
+  text-align: center;
+}
+
+.paso-content { flex: 1; }
+.paso-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.08em;
+  color: var(--blanco);
+  margin-bottom: 0.4rem;
+  line-height: 1;
+}
+.paso-desc {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 14px;
+  color: var(--humo);
+  line-height: 1.7;
+  font-weight: 300;
+}
+.paso-tag {
+  display: inline-block;
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  font-weight: 700;
+  color: var(--neon);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid rgba(0,229,255,0.3);
+  padding: 0.2rem 0.5rem;
+  margin-top: 0.6rem;
+}
+
+/* ── TARIFAS ── */
+.tarifas-section {
+  padding: 4rem 1.25rem;
+  background: var(--negro);
+}
+
+.tarifas-table {
+  margin-top: 2rem;
+  border: 1px solid rgba(0,229,255,0.1);
+  overflow: hidden;
+}
+
+.tarifas-header {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  background: var(--acero);
+  border-bottom: 1px solid rgba(0,229,255,0.15);
+}
+
+.tarifa-th {
+  padding: 0.75rem 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--neon);
+  border-right: 1px solid rgba(0,229,255,0.06);
+}
+.tarifa-th:last-child { border-right: none; }
+
+.tarifa-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  border-bottom: 1px solid rgba(0,229,255,0.05);
+  transition: background 0.15s;
+}
+.tarifa-row:last-child { border-bottom: none; }
+.tarifa-row:hover { background: var(--grafito); }
+
+.tarifa-row.highlight { background: rgba(0,229,255,0.05); }
+
+.tarifa-td {
+  padding: 0.9rem 1rem;
+  border-right: 1px solid rgba(0,229,255,0.04);
+  display: flex;
+  align-items: center;
+}
+.tarifa-td:last-child { border-right: none; }
+
+.tarifa-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 17px;
+  letter-spacing: 0.06em;
+  color: var(--blanco);
+  line-height: 1;
+}
+.tarifa-name-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 8px;
+  color: var(--humo);
+  letter-spacing: 0.06em;
+  margin-top: 0.2rem;
+}
+
+.tarifa-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  color: var(--neon);
+  letter-spacing: 0.04em;
+}
+
+.tarifa-row.highlight .tarifa-price { text-shadow: 0 0 8px var(--neon-glow); }
+
+.tarifas-note {
+  margin-top: 1rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--humo);
+  letter-spacing: 0.08em;
+  line-height: 1.8;
+  border-left: 2px solid rgba(0,229,255,0.3);
+  padding-left: 1rem;
+}
+
+/* ── RESERVE CTA ── */
+.reserve-section {
+  background: var(--neon);
+  padding: 3rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.reserve-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,0,0,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.reserve-content { position: relative; z-index: 1; }
+
+.reserve-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(42px, 11vw, 80px);
+  letter-spacing: 0.06em;
+  color: var(--negro);
+  line-height: 0.92;
+  margin-bottom: 0.75rem;
+}
+
+.reserve-sub {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 16px;
+  color: rgba(5,10,15,0.65);
+  line-height: 1.6;
+  margin-bottom: 2rem;
+  max-width: 380px;
+}
+
+.reserve-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.btn-dark {
+  background: var(--negro);
+  color: var(--neon);
+  padding: 0.9rem 2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  transition: box-shadow 0.2s;
+}
+.btn-dark:active { box-shadow: 0 0 24px rgba(0,229,255,0.4); }
+
+.btn-outline-dark {
+  background: transparent;
+  color: var(--negro);
+  padding: 0.9rem 2rem;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-block;
+  border: 2px solid rgba(5,10,15,0.4);
+  transition: background 0.15s;
+}
+.btn-outline-dark:active { background: rgba(0,0,0,0.08); }
+
+/* ── INFO STRIP ── */
+.info-strip {
+  background: var(--carbon);
+  border-top: 1px solid rgba(0,229,255,0.08);
+  border-bottom: 1px solid rgba(0,229,255,0.08);
+}
+.info-item {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(0,229,255,0.05);
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.15s;
+}
+.info-item:last-child { border-bottom: none; }
+.info-item:active { background: var(--grafito); }
+.info-icon-box {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(0,229,255,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 14px;
+  color: var(--neon);
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+  box-shadow: inset 0 0 12px rgba(0,229,255,0.05);
+}
+.info-text { flex: 1; }
+.info-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--neon);
+  margin-bottom: 0.2rem;
+}
+.info-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.05em;
+  color: var(--blanco);
+  line-height: 1.2;
+}
+.info-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--humo);
+  margin-top: 0.1rem;
+  letter-spacing: 0.04em;
+}
+.info-arrow { color: var(--humo); font-size: 13px; flex-shrink: 0; }
+
+/* ── FOOTER ── */
+footer {
+  background: var(--negro);
+  border-top: 2px solid var(--neon);
+  padding: 2.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+footer::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 40% at 80% 50%, rgba(0,229,255,0.03) 0%, transparent 70%);
+  pointer-events: none;
+}
+.footer-brand { display: flex; flex-direction: column; gap: 0.3rem; }
+.footer-logo {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 40px;
+  letter-spacing: 0.12em;
+  color: var(--blanco);
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(0,229,255,0.15);
+}
+.footer-logo span { color: var(--neon); }
+.footer-tagline {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  color: var(--humo);
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+.footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+.footer-links a {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: var(--humo);
+  text-decoration: none;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--neon); }
+.footer-credit {
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  color: rgba(122,154,176,0.25);
+  letter-spacing: 0.08em;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(0,229,255,0.05);
+}
+
+/* ── FADE ── */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ── DESKTOP ── */
+@media (min-width: 768px) {
+  nav { padding: 1rem 3rem; }
+  .nav-logo { font-size: 30px; }
+
+  .hero { padding: 100px 4rem 0; }
+  .hero-ticker { right: 3rem; }
+  .hero-stat-num { font-size: 32px; }
+
+  .equipo-section { padding: 6rem 4rem; }
+  .eq-grid.active { grid-template-columns: repeat(3, 1fr); }
+
+  .proceso-section { padding: 6rem 4rem; }
+  .proceso-steps {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .tarifas-section { padding: 6rem 4rem; }
+
+  .reserve-section { padding: 5rem 4rem; }
+  .btn-dark, .btn-outline-dark { display: inline-block; width: auto; }
+
+  .info-strip { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .info-item { border-bottom: none; border-right: 1px solid rgba(0,229,255,0.05); padding: 1.75rem 2.5rem; }
+  .info-item:last-child { border-right: none; }
+
+  footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2.5rem 4rem;
+  }
+  .footer-credit { padding-top: 0; border-top: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- SNOW -->
+<div class="snow" aria-hidden="true">
+  <div class="flake"></div><div class="flake"></div><div class="flake"></div>
+  <div class="flake"></div><div class="flake"></div><div class="flake"></div>
+  <div class="flake"></div><div class="flake"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">CUM<span>BRE</span></a>
+  <div class="nav-right">
+    <a href="#equipo" class="nav-tag">Equipo</a>
+    <a href="https://wa.me/5492901000000?text=Hola!%20Quiero%20reservar%20equipamiento" class="nav-cta">Reservar →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <svg class="hero-mountain" viewBox="0 0 1440 400" preserveAspectRatio="none" fill="none">
+    <path d="M0 400 L200 180 L380 280 L520 100 L700 240 L860 60 L1020 200 L1180 80 L1360 220 L1440 140 L1440 400 Z" fill="#00e5ff"/>
+    <path d="M0 400 L160 260 L300 320 L480 160 L620 280 L800 120 L950 260 L1100 140 L1280 280 L1440 200 L1440 400 Z" fill="#050a0f" opacity="0.7"/>
+  </svg>
+  <div class="hero-scan"></div>
+  <div class="hero-ticker">CERRO CASTOR · USHUAIA · TEMPORADA 2025</div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Ushuaia · Temporada 2025</div>
+    <div class="hero-title">EQUIPO</div>
+    <div class="hero-title">PARA</div>
+    <div class="hero-title-ice">LA CUMBRE</div>
+    <div class="hero-neon-line"></div>
+  </div>
+  <div class="hero-bottom">
+    <div class="hero-stat">
+      <span class="hero-stat-num">48H</span>
+      <div class="hero-stat-label">reserva anticipada</div>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">100%</span>
+      <div class="hero-stat-label">equipo revisado</div>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">SKI+</span>
+      <div class="hero-stat-label">snow · ropa · accesorios</div>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGONAL MARQUEE 1 -->
+<div class="diagonal-wrap">
+  <div class="diagonal-strip">
+    <div class="diagonal-track">
+      <span class="diagonal-item">CUMBRE <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">USHUAIA <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">ALQUILER DE NIEVE <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">CERRO CASTOR <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">TEMPORADA 2025 <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">EQUIPO REVISADO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">CUMBRE <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">USHUAIA <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">ALQUILER DE NIEVE <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">CERRO CASTOR <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">TEMPORADA 2025 <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">EQUIPO REVISADO <span class="diagonal-sep">✦</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- EQUIPAMIENTO -->
+<section class="equipo-section fade-in" id="equipo">
+  <div class="section-eyebrow">// Equipamiento disponible</div>
+  <div class="section-title">TODO LO<br>QUE NECESITÁS</div>
+  <div class="equipo-tabs">
+    <button class="eq-tab active" onclick="showEq('ski',this)">SKI</button>
+    <button class="eq-tab" onclick="showEq('snow',this)">SNOWBOARD</button>
+    <button class="eq-tab" onclick="showEq('ropa',this)">ROPA</button>
+    <button class="eq-tab" onclick="showEq('accesorios',this)">ACCESORIOS</button>
+  </div>
+
+  <div class="eq-grid active" id="eq-ski">
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🎿</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">ESQUÍS ADULTO</div>
+        <div class="eq-desc">VARIOS MODELOS · 140CM A 185CM<br>PRINCIPIANTE A AVANZADO</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$12.000</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🎿</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">ESQUÍS NIÑO</div>
+        <div class="eq-desc">80CM A 130CM<br>CON O SIN BASTONES</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$7.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">👟</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">BOTAS DE SKI</div>
+        <div class="eq-desc">TALLE 34 AL 47<br>AJUSTE TÉRMOFORMABLE</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$8.000</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🏒</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">BASTONES</div>
+        <div class="eq-desc">ALUMINIO · 90CM A 130CM<br>INCLUIDOS EN PACK SKI</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$2.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eq-grid" id="eq-snow">
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🏂</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">TABLA SNOWBOARD</div>
+        <div class="eq-desc">140CM A 165CM<br>ALL MOUNTAIN · FREESTYLE</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$13.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">👢</span><div class="eq-corner"></div><span class="eq-status limitado">últimos</span></div>
+      <div class="eq-info">
+        <div class="eq-name">BOTAS SNOW</div>
+        <div class="eq-desc">TALLE 35 AL 46<br>BLANDAS Y DURAS</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$8.000</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🔗</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">FIJACIONES</div>
+        <div class="eq-desc">INCLUIDAS EN EL ALQUILER<br>DE TABLA</div>
+        <div class="eq-price-row">
+          <div class="eq-price">INCLUIDAS</div>
+          <div class="eq-price-unit">con tabla</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🎽</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">PACK COMPLETO SNOW</div>
+        <div class="eq-desc">TABLA + BOTAS + FIJACIONES<br>PRECIO ESPECIAL</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$18.000</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eq-grid" id="eq-ropa">
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🧥</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">CAMPERA TÉCNICA</div>
+        <div class="eq-desc">IMPERMEABLE · TALLE S AL XXL<br>ADULTO Y NIÑO</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$9.000</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">👖</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">PANTALÓN DE NIEVE</div>
+        <div class="eq-desc">IMPERMEABLE · REFORZADO<br>TALLE S AL XXL</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$7.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🎽</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">CONJUNTO ADULTO</div>
+        <div class="eq-desc">CAMPERA + PANTALÓN<br>PACK COMPLETO</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$15.000</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🧒</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">CONJUNTO NIÑO</div>
+        <div class="eq-desc">CAMPERA + PANTALÓN<br>TALLE 4 AL 14</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$11.000</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="eq-grid" id="eq-accesorios">
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">⛑️</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">CASCO</div>
+        <div class="eq-desc">OBLIGATORIO MENORES<br>ADULTO · XS AL XL</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$4.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🥽</span><div class="eq-corner"></div><span class="eq-status limitado">últimos</span></div>
+      <div class="eq-info">
+        <div class="eq-name">ANTIPARRAS</div>
+        <div class="eq-desc">UV400 · ANTI NIEBLA<br>TALLA ÚNICA</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$3.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🧤</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">GUANTES IMPERMEABLES</div>
+        <div class="eq-desc">S / M / L / XL<br>CON FORRO TÉRMICO</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$2.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+    <div class="eq-card">
+      <div class="eq-card-top"><span class="eq-emoji">🧣</span><div class="eq-corner"></div><span class="eq-status disponible">disponible</span></div>
+      <div class="eq-info">
+        <div class="eq-name">BUFF / PASAMONTAÑA</div>
+        <div class="eq-desc">POLAR · TALLA ÚNICA<br>ADULTO Y NIÑO</div>
+        <div class="eq-price-row">
+          <div class="eq-price">$1.500</div>
+          <div class="eq-price-unit">por día</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DIAGONAL 2 -->
+<div class="diagonal-wrap" style="background: var(--negro);">
+  <div class="diagonal-strip diagonal-strip-ice">
+    <div class="diagonal-track diagonal-track-rev">
+      <span class="diagonal-item">EQUIPO REVISADO DIARIAMENTE <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">RESERVA EN 2 MINUTOS <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">RETIRO EN LOCAL <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">TALLE GARANTIZADO <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">CUMBRE · USHUAIA <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">EQUIPO REVISADO DIARIAMENTE <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">RESERVA EN 2 MINUTOS <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">RETIRO EN LOCAL <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">TALLE GARANTIZADO <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">CUMBRE · USHUAIA <span class="diagonal-sep">—</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- COMO FUNCIONA -->
+<section class="proceso-section fade-in" id="proceso">
+  <div class="section-eyebrow">// Cómo funciona</div>
+  <div class="section-title">TAN FÁCIL<br>COMO ESQUIAR</div>
+  <div class="proceso-steps">
+    <div class="paso">
+      <div class="paso-num">01</div>
+      <div class="paso-content">
+        <div class="paso-title">ELEGÍS EL EQUIPO</div>
+        <div class="paso-desc">Seleccionás lo que necesitás — esquís, snow, ropa, o todo junto. Por día o por semana, con precio especial de paquete.</div>
+        <span class="paso-tag">por WhatsApp o en persona</span>
+      </div>
+    </div>
+    <div class="paso">
+      <div class="paso-num">02</div>
+      <div class="paso-content">
+        <div class="paso-title">CONFIRMÁS LA RESERVA</div>
+        <div class="paso-desc">Mandás tus talles, la fecha y dejás una seña. Te confirmamos disponibilidad en el momento. Recomendamos reservar con 48hs.</div>
+        <span class="paso-tag">50% de seña para confirmar</span>
+      </div>
+    </div>
+    <div class="paso">
+      <div class="paso-num">03</div>
+      <div class="paso-content">
+        <div class="paso-title">RETIRÁS EN EL LOCAL</div>
+        <div class="paso-desc">El día que lo necesitás pasás por el local, probás el equipo y ajustamos lo que haga falta. Todo revisado y listo para usar.</div>
+        <span class="paso-tag">San Martín 750 · Centro Ushuaia</span>
+      </div>
+    </div>
+    <div class="paso">
+      <div class="paso-num">04</div>
+      <div class="paso-content">
+        <div class="paso-title">DEVOLVÉS Y LISTO</div>
+        <div class="paso-desc">Al final del día o la temporada traés el equipo de vuelta. Sin complicaciones, sin formularios, sin demora.</div>
+        <span class="paso-tag">hasta las 20:00hs</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TARIFAS -->
+<section class="tarifas-section fade-in" id="tarifas">
+  <div class="section-eyebrow">// Tarifas</div>
+  <div class="section-title">PRECIOS<br>TEMPORADA 2025</div>
+  <div class="tarifas-table">
+    <div class="tarifas-header">
+      <div class="tarifa-th">Equipo</div>
+      <div class="tarifa-th">Medio día</div>
+      <div class="tarifa-th">1 día</div>
+      <div class="tarifa-th">Semana</div>
+    </div>
+    <div class="tarifa-row highlight">
+      <div class="tarifa-td"><div><div class="tarifa-name">Pack Ski Completo</div><div class="tarifa-name-sub">Esquís + botas + bastones</div></div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$14.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$20.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$90.000</div></div>
+    </div>
+    <div class="tarifa-row highlight">
+      <div class="tarifa-td"><div><div class="tarifa-name">Pack Snow Completo</div><div class="tarifa-name-sub">Tabla + botas + fijaciones</div></div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$15.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$22.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$99.000</div></div>
+    </div>
+    <div class="tarifa-row">
+      <div class="tarifa-td"><div><div class="tarifa-name">Esquís solo</div><div class="tarifa-name-sub">Sin botas</div></div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$8.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$12.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$55.000</div></div>
+    </div>
+    <div class="tarifa-row">
+      <div class="tarifa-td"><div><div class="tarifa-name">Conjunto ropa adulto</div><div class="tarifa-name-sub">Campera + pantalón</div></div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$10.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$15.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$68.000</div></div>
+    </div>
+    <div class="tarifa-row">
+      <div class="tarifa-td"><div><div class="tarifa-name">Conjunto ropa niño</div><div class="tarifa-name-sub">Campera + pantalón</div></div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$7.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$11.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$49.000</div></div>
+    </div>
+    <div class="tarifa-row">
+      <div class="tarifa-td"><div><div class="tarifa-name">Casco</div><div class="tarifa-name-sub">Adulto o niño</div></div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$3.000</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$4.500</div></div>
+      <div class="tarifa-td"><div class="tarifa-price">$20.000</div></div>
+    </div>
+  </div>
+  <div class="tarifas-note">
+    Los precios son de referencia · Pueden variar según temporada alta<br>
+    Descuentos por pack completo · Consultar precios para grupos de 4+<br>
+    Medios de pago: efectivo, transferencia, tarjeta con o sin recargo
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="reserve-section fade-in">
+  <div class="reserve-content">
+    <div class="reserve-title">RESERVÁ<br>TU EQUIPO</div>
+    <p class="reserve-sub">No llegues al cerro sin equipo. Reservá con anticipación y asegurate el talle que necesitás.</p>
+    <div class="reserve-actions">
+      <a href="https://wa.me/5492901000000?text=Hola!%20Quiero%20reservar%20equipamiento%20de%20nieve" class="btn-dark">WhatsApp →</a>
+      <a href="tel:+5492901000000" class="btn-outline-dark">Llamar</a>
+    </div>
+  </div>
+</section>
+
+<!-- INFO -->
+<div class="info-strip">
+  <a href="https://maps.google.com" class="info-item">
+    <div class="info-icon-box">📍</div>
+    <div class="info-text">
+      <div class="info-label">Local</div>
+      <div class="info-value">San Martín 750</div>
+      <div class="info-sub">Centro · Ushuaia · TDF</div>
+    </div>
+    <div class="info-arrow">→</div>
+  </a>
+  <div class="info-item">
+    <div class="info-icon-box">🕐</div>
+    <div class="info-text">
+      <div class="info-label">Horarios</div>
+      <div class="info-value">07:30 — 20:00</div>
+      <div class="info-sub">Todos los días en temporada</div>
+    </div>
+  </div>
+  <a href="https://wa.me/5492901000000" class="info-item">
+    <div class="info-icon-box">WS</div>
+    <div class="info-text">
+      <div class="info-label">Reservas</div>
+      <div class="info-value">+54 9 2901 000000</div>
+      <div class="info-sub">WhatsApp · respuesta inmediata</div>
+    </div>
+    <div class="info-arrow">→</div>
+  </a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">CUM<span>BRE</span></div>
+    <div class="footer-tagline">Alquiler de equipamiento · Ushuaia · Temporada 2025</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#equipo">Equipamiento</a></li>
+    <li><a href="#proceso">Cómo funciona</a></li>
+    <li><a href="#tarifas">Tarifas</a></li>
+  </ul>
+  <div class="footer-credit">Desarrollado por Limen · limen.agency</div>
+</footer>
+
+<script>
+  function showEq(id, btn) {
+    document.querySelectorAll('.eq-grid').forEach(g => g.classList.remove('active'));
+    document.querySelectorAll('.eq-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('eq-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

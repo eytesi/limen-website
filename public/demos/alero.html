@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALERO — Cabañas del Sur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bosque:    #070d05;
+  --carbon:    #0d1a09;
+  --rama:      #14230f;
+  --musgo:     #1e3414;
+  --amber:     #e8952a;
+  --oro:       #f5b840;
+  --brasa:     #ff7820;
+  --crema:     #f5e8d0;
+  --blanco:    #fdf6ee;
+  --humo:      #7a9a60;
+  --humo-dim:  #405530;
+  --borde:     rgba(232,149,42,0.15);
+  --ventana:   rgba(245,184,64,0.12);
+}
+
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--bosque);
+  color: var(--crema);
+  font-family: 'Nunito', sans-serif;
+  font-weight: 400;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════
+   LOADER
+══════════════════════════════ */
+#loader {
+  position: fixed;
+  inset: 0;
+  background: var(--bosque);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  transition: opacity 0.7s ease, visibility 0.7s ease;
+}
+#loader.hidden { opacity: 0; visibility: hidden; }
+
+.loader-cabin {
+  width: 180px;
+  height: 200px;
+}
+
+/* Cabin animation parts */
+.cabin-window {
+  animation: windowGlow 1.2s ease-in-out infinite alternate;
+}
+.cabin-window:nth-child(2) { animation-delay: 0.3s; }
+.cabin-window:nth-child(3) { animation-delay: 0.6s; }
+.cabin-window:nth-child(4) { animation-delay: 0.15s; }
+
+@keyframes windowGlow {
+  from { opacity: 0.3; filter: drop-shadow(0 0 0px #f5b840); }
+  to   { opacity: 1;   filter: drop-shadow(0 0 8px #f5b840); }
+}
+
+.cabin-smoke {
+  animation: rise 2s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+.cabin-smoke-2 { animation-delay: 0.7s; animation-duration: 2.4s; }
+
+@keyframes rise {
+  0%   { transform: translateY(0) translateX(0) scaleX(1); opacity: 0.7; }
+  50%  { transform: translateY(-18px) translateX(4px) scaleX(1.4); opacity: 0.4; }
+  100% { transform: translateY(-36px) translateX(-2px) scaleX(0.6); opacity: 0; }
+}
+
+.loader-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: var(--crema);
+  text-transform: uppercase;
+}
+.loader-text span { color: var(--amber); }
+
+.loader-sub {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  color: var(--humo);
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.loader-bar {
+  width: 120px;
+  height: 2px;
+  background: rgba(232,149,42,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loader-bar-fill {
+  height: 100%;
+  background: var(--amber);
+  border-radius: 2px;
+  animation: load 2.2s ease-out forwards;
+  box-shadow: 0 0 8px rgba(232,149,42,0.5);
+}
+@keyframes load {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
+/* ══════════════════════════════
+   NAV
+══════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(7,13,5,0.95);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--borde);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--crema);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.nav-logo span { color: var(--amber); }
+
+.nav-right { display: flex; gap: 0.6rem; align-items: center; }
+
+.nav-link {
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--humo);
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-transform: uppercase;
+  display: none;
+}
+
+.nav-cta {
+  background: var(--amber);
+  color: var(--bosque);
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.5rem 1.1rem;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.15s, box-shadow 0.15s;
+}
+.nav-cta:active { background: var(--oro); box-shadow: 0 0 16px rgba(232,149,42,0.4); }
+
+/* ══════════════════════════════
+   HERO
+══════════════════════════════ */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 1.25rem 0;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse 100% 60% at 60% 100%, rgba(30,52,20,0.6) 0%, transparent 70%),
+              var(--bosque);
+}
+
+/* Geometric forest bg */
+.hero-geo {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Stars/sparks */
+.hero-spark {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: var(--amber);
+  border-radius: 50%;
+  opacity: 0;
+  animation: spark 4s ease-in-out infinite;
+}
+.hero-spark:nth-child(1) { top: 15%; left: 20%; animation-delay: 0s; }
+.hero-spark:nth-child(2) { top: 25%; left: 70%; animation-delay: 1.5s; }
+.hero-spark:nth-child(3) { top: 40%; left: 40%; animation-delay: 0.8s; }
+.hero-spark:nth-child(4) { top: 10%; left: 55%; animation-delay: 2.2s; }
+.hero-spark:nth-child(5) { top: 35%; left: 85%; animation-delay: 3s; }
+
+@keyframes spark {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 0.7; transform: scale(1.5); box-shadow: 0 0 6px var(--amber); }
+}
+
+.hero-eyebrow {
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.8rem;
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--amber);
+  flex-shrink: 0;
+}
+
+.hero-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(72px, 20vw, 160px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 0.88;
+  color: var(--crema);
+  position: relative;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+.hero-title-ghost {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(72px, 20vw, 160px);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  line-height: 0.88;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(232,149,42,0.2);
+  position: relative;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+.hero-amber-line {
+  height: 3px;
+  background: linear-gradient(to right, var(--amber), var(--brasa), transparent);
+  margin: 1.25rem 0 0;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 16px rgba(232,149,42,0.3);
+}
+
+.hero-bottom {
+  background: rgba(13,26,9,0.97);
+  border-top: 1px solid var(--borde);
+  padding: 1.1rem 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  position: relative;
+  z-index: 2;
+}
+.hero-stat { text-align: center; border-right: 1px solid var(--borde); padding: 0.25rem; }
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--amber);
+  line-height: 1;
+  display: block;
+}
+.hero-stat-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--humo);
+  margin-top: 0.2rem;
+}
+
+/* ══════════════════════════════
+   DIAGONAL MARQUEE
+══════════════════════════════ */
+.diagonal-wrap {
+  position: relative;
+  height: 72px;
+  overflow: hidden;
+  background: var(--carbon);
+}
+
+.diagonal-strip {
+  position: absolute;
+  left: -10%; right: -10%;
+  top: 50%;
+  transform: translateY(-50%) rotate(-2deg);
+  background: var(--amber);
+  padding: 0.65rem 0;
+  overflow: hidden;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.diagonal-strip-dark {
+  background: transparent;
+  border-top: 1.5px solid rgba(232,149,42,0.4);
+  border-bottom: 1.5px solid rgba(232,149,42,0.4);
+}
+
+.diagonal-track {
+  display: inline-flex;
+  animation: marquee 22s linear infinite;
+}
+
+.diagonal-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1.75rem;
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--bosque);
+}
+.diagonal-strip-dark .diagonal-item { color: var(--amber); font-size: 13px; }
+.diagonal-sep { opacity: 0.4; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ══════════════════════════════
+   SECTION UTIL
+══════════════════════════════ */
+.s-eyebrow {
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.s-eyebrow::before { content:''; width:18px; height:1px; background:var(--amber); flex-shrink:0; }
+
+.s-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(34px, 9vw, 60px);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--crema);
+  line-height: 0.92;
+  margin-bottom: 1rem;
+}
+
+/* ══════════════════════════════
+   BUILDING WINDOWS
+══════════════════════════════ */
+.edificio-section {
+  background: var(--carbon);
+  padding: 4rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Geometric building illustration at top */
+.edificio-facade {
+  position: relative;
+  margin: 2rem 0;
+}
+
+/* Roof triangle */
+.edificio-roof {
+  width: 0;
+  height: 0;
+  border-left: 60px solid transparent;
+  border-right: 60px solid transparent;
+  border-bottom: 40px solid var(--musgo);
+  margin: 0 auto;
+  position: relative;
+}
+.edificio-roof::before {
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: -8px;
+  width: 16px;
+  height: 30px;
+  background: var(--rama);
+  border-left: 2px solid var(--amber);
+}
+
+/* Chimney smoke mini */
+.edificio-chimney {
+  width: 14px;
+  height: 28px;
+  background: var(--musgo);
+  border-top: 2px solid var(--amber);
+  position: absolute;
+  top: -28px;
+  left: calc(50% - 24px);
+}
+
+/* Building body */
+.edificio-body {
+  background: var(--musgo);
+  border: 1px solid rgba(232,149,42,0.2);
+  border-top: none;
+  padding: 4px;
+  max-width: 120px;
+  margin: 0 auto;
+  display: none; /* hidden on mobile, just use windows grid */
+}
+
+/* Windows grid — the main feature */
+.ventanas-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  margin-top: 2rem;
+}
+
+.ventana {
+  background: var(--rama);
+  border: 1px solid rgba(232,149,42,0.12);
+  padding: 1.4rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+
+/* Amber window glow effect */
+.ventana::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 80% at 50% 30%, rgba(245,184,64,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Window frame top bar */
+.ventana::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(to right, var(--amber), var(--brasa));
+  opacity: 0.6;
+}
+
+.ventana:hover { background: var(--musgo); }
+
+/* Bigger featured window */
+.ventana-grande {
+  grid-column: 1 / -1;
+  background: linear-gradient(135deg, var(--musgo) 0%, var(--rama) 100%);
+}
+.ventana-grande::after { opacity: 1; }
+
+.ventana-icon {
+  font-size: 24px;
+  margin-bottom: 0.6rem;
+  display: block;
+  filter: drop-shadow(0 0 6px rgba(245,184,64,0.3));
+}
+
+.ventana-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.35rem;
+}
+
+.ventana-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--crema);
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+}
+
+.ventana-desc {
+  font-size: 13px;
+  color: var(--humo);
+  line-height: 1.65;
+  margin-top: 0.4rem;
+}
+
+/* Glow dot */
+.ventana-dot {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  width: 7px; height: 7px;
+  background: var(--amber);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--amber);
+  animation: blink 3s ease-in-out infinite;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ══════════════════════════════
+   CABAÑAS / HABITACIONES
+══════════════════════════════ */
+.cabanas-section {
+  padding: 4rem 1.25rem;
+  background: var(--bosque);
+}
+
+.cabanas-tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  margin: 1.75rem 0;
+}
+.cabanas-tabs::-webkit-scrollbar { display: none; }
+
+.cab-tab {
+  padding: 0.55rem 1.2rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--humo);
+  background: var(--carbon);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  border-bottom: 2px solid transparent;
+}
+.cab-tab.active { color: var(--amber); border-bottom-color: var(--amber); background: var(--rama); }
+
+.cab-grid { display: none; }
+.cab-grid.active { display: flex; flex-direction: column; gap: 2px; }
+
+.cab-card {
+  background: var(--carbon);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.cab-card-img {
+  height: 200px;
+  background: var(--musgo);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cab-card-img::after {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(232,149,42,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,149,42,0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.cab-emoji { font-size: 64px; opacity: 0.35; position: relative; z-index: 1; }
+
+.cab-badge {
+  position: absolute;
+  top: 1rem; left: 1rem;
+  background: var(--amber);
+  color: var(--bosque);
+  font-family: 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 4px;
+  z-index: 2;
+}
+
+.cab-card-info { padding: 1.5rem; }
+
+.cab-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--crema);
+  margin-bottom: 0.4rem;
+}
+
+.cab-desc {
+  font-size: 14px;
+  color: var(--humo);
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.cab-features {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+.cab-feat {
+  font-family: 'Nunito', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--amber);
+  border: 1px solid rgba(232,149,42,0.3);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  letter-spacing: 0.06em;
+}
+
+.cab-price-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--borde);
+  padding-top: 1rem;
+}
+
+.cab-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--amber);
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+.cab-price-unit {
+  font-size: 11px;
+  color: var(--humo-dim);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding-bottom: 0.2rem;
+}
+
+.btn-amber {
+  background: var(--amber);
+  color: var(--bosque);
+  padding: 0.75rem 1.5rem;
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 6px;
+  display: inline-block;
+  transition: background 0.15s, box-shadow 0.15s;
+  white-space: nowrap;
+}
+.btn-amber:active { background: var(--oro); box-shadow: 0 0 16px rgba(232,149,42,0.4); }
+
+/* ══════════════════════════════
+   DIAGONAL 2 (dark)
+══════════════════════════════ */
+.diagonal-wrap-2 {
+  position: relative;
+  height: 68px;
+  overflow: hidden;
+  background: var(--carbon);
+}
+
+/* ══════════════════════════════
+   EXPERIENCIAS
+══════════════════════════════ */
+.exp-section {
+  padding: 4rem 1.25rem;
+  background: var(--rama);
+  position: relative;
+  overflow: hidden;
+}
+
+.exp-section::before {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(232,149,42,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.exp-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 2rem;
+}
+
+.exp-item {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem;
+  background: var(--carbon);
+  transition: background 0.15s;
+  border-left: 2px solid transparent;
+  transition: border-color 0.2s, background 0.2s;
+}
+.exp-item:hover { background: var(--musgo); border-left-color: var(--amber); }
+
+.exp-icon {
+  width: 44px; height: 44px;
+  background: var(--musgo);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.exp-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--crema);
+  margin-bottom: 0.2rem;
+}
+.exp-desc { font-size: 13px; color: var(--humo); line-height: 1.6; }
+
+/* ══════════════════════════════
+   INFO STRIP
+══════════════════════════════ */
+.info-strip {
+  background: var(--bosque);
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+}
+.info-item {
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-bottom: 1px solid rgba(232,149,42,0.06);
+  text-decoration: none;
+  color: inherit;
+}
+.info-item:last-child { border-bottom: none; }
+.info-icon {
+  width: 38px; height: 38px;
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  background: var(--carbon);
+}
+.info-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.15rem;
+}
+.info-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--crema);
+  line-height: 1.2;
+  letter-spacing: 0.02em;
+}
+.info-sub { font-size: 12px; color: var(--humo); margin-top: 0.1rem; }
+.info-arrow { color: var(--humo-dim); font-size: 13px; flex-shrink: 0; }
+
+/* ══════════════════════════════
+   RESERVA CTA
+══════════════════════════════ */
+.reserva-section {
+  background: var(--musgo);
+  padding: 4rem 1.25rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.reserva-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(232,149,42,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(232,149,42,0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
+  pointer-events: none;
+}
+
+.reserva-content { position: relative; z-index: 1; }
+
+.reserva-title {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(40px, 11vw, 72px);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--crema);
+  line-height: 0.92;
+  margin-bottom: 1rem;
+}
+.reserva-title span { color: var(--amber); }
+
+.reserva-sub {
+  font-size: 15px;
+  color: var(--humo);
+  line-height: 1.75;
+  margin-bottom: 2rem;
+  max-width: 380px;
+}
+
+.reserva-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.btn-ghost-amber {
+  background: transparent;
+  color: var(--amber);
+  padding: 0.85rem 1.75rem;
+  border: 1.5px solid rgba(232,149,42,0.5);
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 6px;
+  transition: background 0.15s;
+}
+.btn-ghost-amber:active { background: rgba(232,149,42,0.1); }
+
+/* ══════════════════════════════
+   FOOTER
+══════════════════════════════ */
+footer {
+  background: var(--bosque);
+  border-top: 2px solid var(--amber);
+  padding: 2.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: relative;
+}
+footer::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 60% at 80% 50%, rgba(232,149,42,0.04) 0%, transparent 70%);
+  pointer-events: none;
+}
+.footer-brand { display: flex; flex-direction: column; gap: 0.3rem; }
+.footer-logo {
+  font-family: 'Syne', sans-serif;
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--crema);
+  line-height: 1;
+}
+.footer-logo span { color: var(--amber); }
+.footer-tagline {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--humo-dim);
+  line-height: 1.4;
+}
+.footer-links { display: flex; gap: 1.25rem; list-style: none; flex-wrap: wrap; }
+.footer-links a {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--humo);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--amber); }
+.footer-credit {
+  font-size: 11px;
+  color: rgba(122,154,96,0.25);
+  letter-spacing: 0.08em;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(232,149,42,0.07);
+}
+
+/* ══════════════════════════════
+   FADE
+══════════════════════════════ */
+.fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ══════════════════════════════
+   DESKTOP
+══════════════════════════════ */
+@media (min-width: 768px) {
+  nav { padding: 1rem 3rem; }
+  .nav-link { display: block; }
+  .nav-logo { font-size: 26px; }
+
+  .hero { padding: 100px 4rem 0; }
+
+  .edificio-section { padding: 6rem 4rem; }
+  .ventanas-grid { grid-template-columns: repeat(3, 1fr); }
+  .ventana-grande { grid-column: auto; }
+
+  .cabanas-section { padding: 6rem 4rem; }
+  .cab-grid.active { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .cab-card-img { height: 240px; }
+
+  .exp-section { padding: 6rem 4rem; }
+  .exp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+
+  .info-strip { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .info-item { border-bottom: none; border-right: 1px solid rgba(232,149,42,0.06); padding: 2rem 2.5rem; }
+  .info-item:last-child { border-right: none; }
+
+  .reserva-section { padding: 6rem 4rem; }
+
+  footer { flex-direction: row; align-items: center; justify-content: space-between; padding: 2.5rem 4rem; }
+  .footer-credit { padding-top: 0; border-top: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOADER ══ -->
+<div id="loader">
+  <svg class="loader-cabin" viewBox="0 0 180 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Smoke -->
+    <ellipse class="cabin-smoke" cx="82" cy="28" rx="5" ry="7" fill="rgba(232,149,42,0.4)"/>
+    <ellipse class="cabin-smoke cabin-smoke-2" cx="90" cy="22" rx="4" ry="6" fill="rgba(232,149,42,0.25)"/>
+    <!-- Chimney -->
+    <rect x="74" y="42" width="16" height="30" fill="#1e3414"/>
+    <rect x="74" y="42" width="16" height="3" fill="#e8952a" opacity="0.7"/>
+    <!-- Roof -->
+    <polygon points="20,90 160,90 148,52 32,52" fill="#1e3414" stroke="rgba(232,149,42,0.3)" stroke-width="1"/>
+    <!-- Roof ridge -->
+    <line x1="90" y1="52" x2="90" y2="90" stroke="rgba(232,149,42,0.15)" stroke-width="1"/>
+    <!-- Body -->
+    <rect x="24" y="90" width="132" height="100" fill="#142310" stroke="rgba(232,149,42,0.2)" stroke-width="1"/>
+    <!-- Windows row 1 -->
+    <rect class="cabin-window" x="34" y="104" width="38" height="28" rx="2" fill="#f5b840" opacity="0.7"/>
+    <rect class="cabin-window" x="108" y="104" width="38" height="28" rx="2" fill="#f5b840" opacity="0.5"/>
+    <!-- Window cross bars -->
+    <line x1="53" y1="104" x2="53" y2="132" stroke="rgba(20,35,16,0.6)" stroke-width="1.5"/>
+    <line x1="34" y1="118" x2="72" y2="118" stroke="rgba(20,35,16,0.6)" stroke-width="1.5"/>
+    <line x1="127" y1="104" x2="127" y2="132" stroke="rgba(20,35,16,0.6)" stroke-width="1.5"/>
+    <line x1="108" y1="118" x2="146" y2="118" stroke="rgba(20,35,16,0.6)" stroke-width="1.5"/>
+    <!-- Windows row 2 -->
+    <rect class="cabin-window" x="34" y="148" width="38" height="28" rx="2" fill="#ff7820" opacity="0.5"/>
+    <rect class="cabin-window" x="108" y="148" width="38" height="28" rx="2" fill="#f5b840" opacity="0.6"/>
+    <!-- Door -->
+    <rect x="72" y="155" width="36" height="35" rx="2" fill="#0d1a09" stroke="rgba(232,149,42,0.3)" stroke-width="1"/>
+    <rect x="80" y="180" width="6" height="6" rx="3" fill="#e8952a" opacity="0.8"/>
+    <!-- Ground line -->
+    <line x1="10" y1="190" x2="170" y2="190" stroke="rgba(232,149,42,0.2)" stroke-width="1"/>
+    <!-- Snow on roof -->
+    <path d="M20,90 Q90,82 160,90" stroke="rgba(232,244,248,0.15)" stroke-width="3" fill="none"/>
+  </svg>
+  <div class="loader-text">AL<span>ERO</span></div>
+  <div class="loader-sub">Cabañas del Sur · Ushuaia</div>
+  <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="nav-logo">AL<span>ERO</span></a>
+  <div class="nav-right">
+    <a href="#cabanas" class="nav-link">Cabañas</a>
+    <a href="#tarifas" class="nav-link">Tarifas</a>
+    <a href="https://wa.me/5492901000000?text=Hola!%20Quiero%20consultar%20disponibilidad" class="nav-cta">Reservar</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-geo">
+    <div class="hero-spark"></div><div class="hero-spark"></div>
+    <div class="hero-spark"></div><div class="hero-spark"></div>
+    <div class="hero-spark"></div>
+  </div>
+  <div class="hero-eyebrow">Ushuaia · Fin del mundo</div>
+  <div class="hero-title">DONDE</div>
+  <div class="hero-title">EL BOSQUE</div>
+  <div class="hero-title-ghost">TERMINA</div>
+  <div class="hero-amber-line"></div>
+  <div class="hero-bottom">
+    <div class="hero-stat">
+      <span class="hero-stat-num">6</span>
+      <div class="hero-stat-label">cabañas</div>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">2KM</span>
+      <div class="hero-stat-label">del centro</div>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">TODO</span>
+      <div class="hero-stat-label">el año</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE 1 ══ -->
+<div class="diagonal-wrap">
+  <div class="diagonal-strip">
+    <div class="diagonal-track">
+      <span class="diagonal-item">ALERO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">USHUAIA <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">BOSQUE NATIVO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">VISTA AL CANAL <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">DESAYUNO INCLUIDO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">FIN DEL MUNDO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">ALERO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">USHUAIA <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">BOSQUE NATIVO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">VISTA AL CANAL <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">DESAYUNO INCLUIDO <span class="diagonal-sep">✦</span></span>
+      <span class="diagonal-item">FIN DEL MUNDO <span class="diagonal-sep">✦</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BUILDING WINDOWS ══ -->
+<section class="edificio-section fade-in">
+  <div class="s-eyebrow">// El lugar</div>
+  <div class="s-title">CADA DETALLE<br>IMPORTA</div>
+  <div class="ventanas-grid">
+    <div class="ventana ventana-grande">
+      <div class="ventana-dot"></div>
+      <span class="ventana-icon">🏔️</span>
+      <div class="ventana-label">Ubicación</div>
+      <div class="ventana-value">Bosque nativo a 2km del centro</div>
+      <div class="ventana-desc">Rodeadas de lengas centenarias, con acceso directo al cerro y a 20 minutos del aeropuerto. El silencio que no encontrás en ningún hotel.</div>
+    </div>
+    <div class="ventana">
+      <div class="ventana-dot"></div>
+      <span class="ventana-icon">☕</span>
+      <div class="ventana-label">Desayuno</div>
+      <div class="ventana-value">Incluido todos los días</div>
+      <div class="ventana-desc">Con productos regionales y pan casero.</div>
+    </div>
+    <div class="ventana">
+      <div class="ventana-dot"></div>
+      <span class="ventana-icon">🔥</span>
+      <div class="ventana-label">Calefacción</div>
+      <div class="ventana-value">Leña + split</div>
+      <div class="ventana-desc">Cada cabaña tiene su chimenea y calefacción central.</div>
+    </div>
+    <div class="ventana">
+      <div class="ventana-dot"></div>
+      <span class="ventana-icon">🅿️</span>
+      <div class="ventana-label">Estacionamiento</div>
+      <div class="ventana-value">Privado y cubierto</div>
+      <div class="ventana-desc">Techado para días de nieve.</div>
+    </div>
+    <div class="ventana">
+      <div class="ventana-dot"></div>
+      <span class="ventana-icon">📶</span>
+      <div class="ventana-label">Wifi</div>
+      <div class="ventana-value">Fibra · 200 Mbps</div>
+      <div class="ventana-desc">Para los que no pueden desconectarse del todo.</div>
+    </div>
+    <div class="ventana">
+      <div class="ventana-dot"></div>
+      <span class="ventana-icon">🐕</span>
+      <div class="ventana-label">Mascotas</div>
+      <div class="ventana-value">Bienvenidas</div>
+      <div class="ventana-desc">Con previo aviso. Hay espacio de sobra.</div>
+    </div>
+    <div class="ventana">
+      <div class="ventana-dot"></div>
+      <span class="ventana-icon">🧖</span>
+      <div class="ventana-label">Extras</div>
+      <div class="ventana-value">Jacuzzi en suite</div>
+      <div class="ventana-desc">Disponible en Cabaña Suite Beagle.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CABAÑAS ══ -->
+<section class="cabanas-section fade-in" id="cabanas">
+  <div class="s-eyebrow">// Alojamiento</div>
+  <div class="s-title">LAS<br>CABAÑAS</div>
+  <div class="cabanas-tabs">
+    <button class="cab-tab active" onclick="showCab('todas',this)">Todas</button>
+    <button class="cab-tab" onclick="showCab('pequena',this)">Para 2</button>
+    <button class="cab-tab" onclick="showCab('mediana',this)">Para 4</button>
+    <button class="cab-tab" onclick="showCab('suite',this)">Suite</button>
+  </div>
+
+  <div class="cab-grid active" id="cab-todas">
+    <div class="cab-card">
+      <div class="cab-card-img">
+        <span class="cab-emoji">🌲</span>
+        <span class="cab-badge">disponible</span>
+      </div>
+      <div class="cab-card-info">
+        <div class="cab-name">Cabaña Lenga</div>
+        <div class="cab-desc">Para dos personas. Dormitorio en mezzanine, ventanal al bosque, chimenea a leña. El lugar perfecto para no salir de la cama.</div>
+        <div class="cab-features">
+          <span class="cab-feat">Para 2</span>
+          <span class="cab-feat">Chimenea</span>
+          <span class="cab-feat">Mezzanine</span>
+          <span class="cab-feat">Desayuno</span>
+        </div>
+        <div class="cab-price-row">
+          <div>
+            <div class="cab-price">$85.000</div>
+            <div class="cab-price-unit">por noche</div>
+          </div>
+          <a href="https://wa.me/5492901000000" class="btn-amber">Reservar →</a>
+        </div>
+      </div>
+    </div>
+    <div class="cab-card">
+      <div class="cab-card-img">
+        <span class="cab-emoji">🏔️</span>
+        <span class="cab-badge">disponible</span>
+      </div>
+      <div class="cab-card-info">
+        <div class="cab-name">Cabaña Beagle</div>
+        <div class="cab-desc">Para cuatro personas. Dos dormitorios, living amplio con estufa, cocina completa y deck con vista al canal. Para quedarse más de una noche.</div>
+        <div class="cab-features">
+          <span class="cab-feat">Para 4</span>
+          <span class="cab-feat">Vista canal</span>
+          <span class="cab-feat">Deck</span>
+          <span class="cab-feat">Cocina</span>
+        </div>
+        <div class="cab-price-row">
+          <div>
+            <div class="cab-price">$130.000</div>
+            <div class="cab-price-unit">por noche</div>
+          </div>
+          <a href="https://wa.me/5492901000000" class="btn-amber">Reservar →</a>
+        </div>
+      </div>
+    </div>
+    <div class="cab-card">
+      <div class="cab-card-img">
+        <span class="cab-emoji">🛁</span>
+        <span class="cab-badge">suite</span>
+      </div>
+      <div class="cab-card-info">
+        <div class="cab-name">Suite Beagle Premium</div>
+        <div class="cab-desc">La cabaña más grande. Jacuzzi en suite, chimenea doble, bañadera con vista al bosque y desayuno en la cabaña. Para cuando merece la pena.</div>
+        <div class="cab-features">
+          <span class="cab-feat">Para 2</span>
+          <span class="cab-feat">Jacuzzi</span>
+          <span class="cab-feat">Desayuno en cabaña</span>
+          <span class="cab-feat">Bañadera</span>
+        </div>
+        <div class="cab-price-row">
+          <div>
+            <div class="cab-price">$180.000</div>
+            <div class="cab-price-unit">por noche</div>
+          </div>
+          <a href="https://wa.me/5492901000000" class="btn-amber">Reservar →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cab-grid" id="cab-pequena">
+    <div class="cab-card">
+      <div class="cab-card-img"><span class="cab-emoji">🌲</span><span class="cab-badge">disponible</span></div>
+      <div class="cab-card-info">
+        <div class="cab-name">Cabaña Lenga</div>
+        <div class="cab-desc">Para dos personas. Dormitorio en mezzanine, ventanal al bosque, chimenea a leña.</div>
+        <div class="cab-features"><span class="cab-feat">Para 2</span><span class="cab-feat">Chimenea</span><span class="cab-feat">Mezzanine</span></div>
+        <div class="cab-price-row">
+          <div><div class="cab-price">$85.000</div><div class="cab-price-unit">por noche</div></div>
+          <a href="https://wa.me/5492901000000" class="btn-amber">Reservar →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cab-grid" id="cab-mediana">
+    <div class="cab-card">
+      <div class="cab-card-img"><span class="cab-emoji">🏔️</span><span class="cab-badge">disponible</span></div>
+      <div class="cab-card-info">
+        <div class="cab-name">Cabaña Beagle</div>
+        <div class="cab-desc">Para cuatro personas. Dos dormitorios, living amplio, deck con vista al canal.</div>
+        <div class="cab-features"><span class="cab-feat">Para 4</span><span class="cab-feat">Vista canal</span><span class="cab-feat">Deck</span></div>
+        <div class="cab-price-row">
+          <div><div class="cab-price">$130.000</div><div class="cab-price-unit">por noche</div></div>
+          <a href="https://wa.me/5492901000000" class="btn-amber">Reservar →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="cab-grid" id="cab-suite">
+    <div class="cab-card">
+      <div class="cab-card-img"><span class="cab-emoji">🛁</span><span class="cab-badge">suite</span></div>
+      <div class="cab-card-info">
+        <div class="cab-name">Suite Beagle Premium</div>
+        <div class="cab-desc">Jacuzzi en suite, chimenea doble, bañadera con vista al bosque y desayuno en la cabaña.</div>
+        <div class="cab-features"><span class="cab-feat">Jacuzzi</span><span class="cab-feat">Desayuno en cabaña</span></div>
+        <div class="cab-price-row">
+          <div><div class="cab-price">$180.000</div><div class="cab-price-unit">por noche</div></div>
+          <a href="https://wa.me/5492901000000" class="btn-amber">Reservar →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE 2 ══ -->
+<div class="diagonal-wrap-2">
+  <div class="diagonal-strip diagonal-strip-dark">
+    <div class="diagonal-track" style="animation-direction:reverse; animation-duration:28s;">
+      <span class="diagonal-item">CHECK-IN 14:00 <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">CHECK-OUT 11:00 <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">DESAYUNO INCLUIDO <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">ESTACIONAMIENTO GRATIS <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">MASCOTAS BIENVENIDAS <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">CHECK-IN 14:00 <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">CHECK-OUT 11:00 <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">DESAYUNO INCLUIDO <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">ESTACIONAMIENTO GRATIS <span class="diagonal-sep">—</span></span>
+      <span class="diagonal-item">MASCOTAS BIENVENIDAS <span class="diagonal-sep">—</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ EXPERIENCIAS ══ -->
+<section class="exp-section fade-in">
+  <div class="s-eyebrow">// Qué hacer</div>
+  <div class="s-title">EL SUR<br>AFUERA</div>
+  <div class="exp-grid">
+    <div class="exp-item">
+      <div class="exp-icon">⛷️</div>
+      <div>
+        <div class="exp-title">Cerro Castor</div>
+        <div class="exp-desc">A 26km. El cerro más austral del mundo. Nieve garantizada de junio a octubre.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-icon">🚢</div>
+      <div>
+        <div class="exp-title">Navegación Beagle</div>
+        <div class="exp-desc">Salidas diarias desde el puerto. Lobos marinos, cormoranes y el faro del fin del mundo.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-icon">🥾</div>
+      <div>
+        <div class="exp-title">Trekking Tierra del Fuego</div>
+        <div class="exp-desc">El parque nacional a 12km. Senderos para todos los niveles, desde 2 horas hasta el día entero.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-icon">🎣</div>
+      <div>
+        <div class="exp-title">Pesca con mosca</div>
+        <div class="exp-desc">Ríos de clase mundial a minutos. Coordinamos guías locales con anticipación.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-icon">🌌</div>
+      <div>
+        <div class="exp-title">Cielos del sur</div>
+        <div class="exp-desc">Poca contaminación lumínica. Las noches claras de invierno son extraordinarias.</div>
+      </div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-icon">🏙️</div>
+      <div>
+        <div class="exp-title">Centro de Ushuaia</div>
+        <div class="exp-desc">A 5 minutos en auto. Restaurantes, duty free, museos y el puerto a pie.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ INFO ══ -->
+<div class="info-strip">
+  <a href="https://maps.google.com" class="info-item">
+    <div class="info-icon">📍</div>
+    <div>
+      <div class="info-label">Dirección</div>
+      <div class="info-value">Ruta 3 Km 2.5</div>
+      <div class="info-sub">Ushuaia, Tierra del Fuego</div>
+    </div>
+    <div class="info-arrow">→</div>
+  </a>
+  <div class="info-item">
+    <div class="info-icon">🕐</div>
+    <div>
+      <div class="info-label">Check-in / out</div>
+      <div class="info-value">14:00 / 11:00</div>
+      <div class="info-sub">Early check-in disponible</div>
+    </div>
+  </div>
+  <a href="https://wa.me/5492901000000" class="info-item">
+    <div class="info-icon">💬</div>
+    <div>
+      <div class="info-label">Reservas</div>
+      <div class="info-value">+54 9 2901 000000</div>
+      <div class="info-sub">WhatsApp · siempre respondemos</div>
+    </div>
+    <div class="info-arrow">→</div>
+  </a>
+</div>
+
+<!-- ══ RESERVA CTA ══ -->
+<section class="reserva-section fade-in">
+  <div class="reserva-content">
+    <div class="reserva-title">RESERVÁ<br>TU <span>CABAÑA</span></div>
+    <p class="reserva-sub">Disponibilidad limitada. Consulte fechas y confirmamos en el día. Pago con seña del 30% para asegurar la reserva.</p>
+    <div class="reserva-actions">
+      <a href="https://wa.me/5492901000000?text=Hola!%20Quiero%20consultar%20disponibilidad%20en%20Alero" class="btn-amber">WhatsApp →</a>
+      <a href="mailto:reservas@alero.com.ar" class="btn-ghost-amber">Email</a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">AL<span>ERO</span></div>
+    <div class="footer-tagline">Cabañas del Sur · Ushuaia · Tierra del Fuego</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#cabanas">Cabañas</a></li>
+    <li><a href="#">Experiencias</a></li>
+    <li><a href="#">Tarifas</a></li>
+  </ul>
+  <div class="footer-credit">Desarrollado por Limen · limen.agency</div>
+</footer>
+
+<script>
+  // Loader
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loader').classList.add('hidden');
+    }, 2600);
+  });
+
+  // Cabañas tabs
+  function showCab(id, btn) {
+    document.querySelectorAll('.cab-grid').forEach(g => g.classList.remove('active'));
+    document.querySelectorAll('.cab-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('cab-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Fade in
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>

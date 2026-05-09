@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Leña · Parrilla & Cocina del Sur</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --tierra: #1a1208;
+  --carbon: #241b0e;
+  --madera: #3d2b14;
+  --amber: #c07a2a;
+  --oro: #e8a53a;
+  --crema: #f5ecd7;
+  --blanco: #fdf8f0;
+  --humo: #b8a898;
+  --humo-dim: #7a6d60;
+  --verde: #2d3d2a;
+  --borde: rgba(192,122,42,0.18);
+}
+
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--tierra);
+  color: var(--crema);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+  font-size: 16px;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(26,18,8,0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--borde);
+}
+
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--crema);
+  text-decoration: none;
+  letter-spacing: 0.04em;
+}
+.nav-logo span { color: var(--amber); }
+
+.nav-wsp {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #25d366;
+  color: white;
+  padding: 0.55rem 1rem;
+  font-size: 13px;
+  font-weight: 500;
+  text-decoration: none;
+  border-radius: 4px;
+}
+.nav-wsp svg { width: 15px; height: 15px; fill: white; flex-shrink: 0; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 1.25rem 3rem;
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(160deg, #2a1c0a 0%, var(--tierra) 65%);
+}
+
+.hero-glow {
+  position: absolute;
+  top: 10%;
+  right: -10%;
+  width: 70%;
+  height: 60%;
+  background: radial-gradient(ellipse, rgba(192,122,42,0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-label {
+  font-size: 11px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.hero-label::before {
+  content: '';
+  width: 22px; height: 1px;
+  background: var(--amber);
+  flex-shrink: 0;
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(52px, 15vw, 88px);
+  font-weight: 400;
+  line-height: 1.02;
+  color: var(--crema);
+  margin-bottom: 1.25rem;
+}
+.hero-title em { font-style: italic; color: var(--amber); display: block; }
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--humo);
+  line-height: 1.75;
+  margin-bottom: 2rem;
+  max-width: 360px;
+}
+
+.hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+.btn-primary {
+  background: var(--amber);
+  color: var(--tierra);
+  padding: 0.85rem 1.75rem;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  display: inline-block;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  -webkit-appearance: none;
+  transition: background 0.15s;
+}
+.btn-primary:active { background: var(--oro); }
+
+.btn-ghost {
+  border: 1px solid rgba(192,122,42,0.4);
+  color: var(--crema);
+  padding: 0.85rem 1.75rem;
+  font-size: 14px;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+}
+.btn-ghost:active { background: rgba(192,122,42,0.08); }
+
+/* ── INFO STRIP ── */
+.info-strip {
+  background: var(--carbon);
+  border-top: 1px solid var(--borde);
+  border-bottom: 1px solid var(--borde);
+}
+
+.info-item {
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  border-bottom: 1px solid var(--borde);
+  text-decoration: none;
+  color: inherit;
+}
+.info-item:last-child { border-bottom: none; }
+
+.info-icon {
+  width: 36px; height: 36px;
+  background: rgba(192,122,42,0.1);
+  border: 1px solid var(--borde);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.info-text { flex: 1; min-width: 0; }
+.info-label {
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.15rem;
+}
+.info-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  color: var(--crema);
+  line-height: 1.3;
+}
+.info-sub { font-size: 12px; color: var(--humo-dim); margin-top: 0.1rem; }
+.info-arrow { color: var(--humo-dim); font-size: 13px; flex-shrink: 0; }
+
+/* ── SECTION UTIL ── */
+.section-label {
+  font-size: 10px;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.section-label::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--amber);
+  flex-shrink: 0;
+}
+
+/* ── ABOUT ── */
+.about {
+  padding: 3rem 1.25rem;
+  background: var(--carbon);
+}
+
+.about-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 7vw, 42px);
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--crema);
+  margin-bottom: 1.25rem;
+}
+.about-heading em { font-style: italic; color: var(--amber); }
+
+.about-body {
+  font-size: 15px;
+  color: var(--humo);
+  line-height: 1.85;
+  margin-bottom: 0.9rem;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--borde);
+  text-align: center;
+}
+.stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px;
+  color: var(--amber);
+  line-height: 1;
+  display: block;
+}
+.stat-label { font-size: 11px; color: var(--humo-dim); margin-top: 0.3rem; line-height: 1.4; }
+
+/* ── MENU ── */
+.menu-section {
+  padding: 3rem 0;
+  background: var(--tierra);
+}
+.menu-header { padding: 0 1.25rem 2rem; }
+.menu-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(32px, 8vw, 48px);
+  font-weight: 400;
+  color: var(--crema);
+  margin-bottom: 0.5rem;
+}
+.menu-title em { color: var(--amber); font-style: italic; }
+.menu-desc { font-size: 14px; color: var(--humo); line-height: 1.7; }
+
+.menu-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--borde);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 1.25rem;
+  margin-bottom: 0;
+}
+.menu-tabs::-webkit-scrollbar { display: none; }
+
+.menu-tab {
+  padding: 0.75rem 1.1rem;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--humo-dim);
+  cursor: pointer;
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: none;
+  font-family: 'DM Sans', sans-serif;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+  margin-bottom: -1px;
+}
+.menu-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+
+.menu-grid { display: none; }
+.menu-grid.active { display: block; }
+
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.2rem 1.25rem;
+  border-bottom: 1px solid rgba(192,122,42,0.07);
+  transition: background 0.15s;
+}
+.menu-item:active { background: var(--carbon); }
+.menu-item-info { flex: 1; min-width: 0; }
+.menu-item-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  color: var(--crema);
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+}
+.menu-item-desc { font-size: 13px; color: var(--humo-dim); line-height: 1.6; }
+.menu-item-tag {
+  display: inline-block;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber);
+  border: 1px solid rgba(192,122,42,0.35);
+  padding: 0.15rem 0.4rem;
+  margin-top: 0.45rem;
+}
+.menu-item-price {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  color: var(--amber);
+  white-space: nowrap;
+  padding-top: 0.15rem;
+  flex-shrink: 0;
+}
+
+/* ── HORARIOS ── */
+.hours-section {
+  background: var(--verde);
+  padding: 3rem 1.25rem;
+}
+.hours-section .section-label { color: #a8c89a; }
+.hours-section .section-label::before { background: #a8c89a; }
+.hours-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 7vw, 40px);
+  color: var(--blanco);
+  margin-bottom: 0.5rem;
+  line-height: 1.15;
+}
+.hours-sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  margin-bottom: 1.75rem;
+  line-height: 1.7;
+}
+.hours-list {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 2rem;
+}
+.hours-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.hours-day { font-size: 14px; color: rgba(255,255,255,0.5); }
+.hours-time { font-family: 'Playfair Display', serif; font-size: 16px; color: var(--blanco); }
+.hours-closed { font-size: 13px; color: rgba(255,255,255,0.22); font-style: italic; }
+
+.hours-cta {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 1.5rem;
+}
+.hours-cta-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--blanco);
+  margin-bottom: 0.45rem;
+}
+.hours-cta-body {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+}
+.wsp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: #25d366;
+  color: white;
+  padding: 0.9rem 1.5rem;
+  font-size: 14px;
+  font-weight: 500;
+  text-decoration: none;
+  width: 100%;
+  transition: background 0.15s;
+}
+.wsp-btn:active { background: #1fb255; }
+.wsp-btn svg { width: 17px; height: 17px; fill: white; flex-shrink: 0; }
+
+/* ── UBICACION ── */
+.ubicacion-section { background: var(--carbon); }
+.ubicacion-text { padding: 3rem 1.25rem 2rem; }
+.ubicacion-heading {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 7vw, 40px);
+  color: var(--crema);
+  margin-bottom: 0.8rem;
+}
+.ubicacion-address {
+  font-size: 15px;
+  color: var(--humo);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+.ubicacion-address strong {
+  color: var(--crema);
+  font-weight: 400;
+  display: block;
+  font-size: 17px;
+  margin-bottom: 0.2rem;
+}
+
+.map-placeholder {
+  height: 220px;
+  background: linear-gradient(135deg, #2d3d2a, #1f2b1c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+.map-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(74,94,63,0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(74,94,63,0.3) 1px, transparent 1px);
+  background-size: 36px 36px;
+}
+.map-pin { position: relative; z-index: 2; text-align: center; }
+.map-pin-dot {
+  width: 13px; height: 13px;
+  background: var(--amber);
+  border-radius: 50%;
+  margin: 0 auto 0.5rem;
+  box-shadow: 0 0 0 6px rgba(192,122,42,0.2), 0 0 0 14px rgba(192,122,42,0.08);
+  animation: pulse 2.2s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 6px rgba(192,122,42,0.2), 0 0 0 14px rgba(192,122,42,0.08); }
+  50% { box-shadow: 0 0 0 10px rgba(192,122,42,0.15), 0 0 0 22px rgba(192,122,42,0.04); }
+}
+.map-label { font-size: 11px; color: var(--amber); letter-spacing: 0.08em; }
+.map-open-btn {
+  position: absolute;
+  bottom: 1rem; right: 1rem;
+  background: rgba(26,18,8,0.85);
+  border: 1px solid var(--borde);
+  color: var(--crema);
+  font-size: 12px;
+  padding: 0.45rem 0.85rem;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(4px);
+  z-index: 3;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--tierra);
+  border-top: 1px solid var(--borde);
+  padding: 2rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.footer-logo { font-family: 'Playfair Display', serif; font-size: 19px; color: var(--crema); }
+.footer-logo span { color: var(--amber); }
+.footer-links { display: flex; gap: 1.5rem; list-style: none; flex-wrap: wrap; }
+.footer-links a {
+  font-size: 12px;
+  color: var(--humo-dim);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.footer-credit {
+  font-size: 11px;
+  color: rgba(184,168,152,0.28);
+  letter-spacing: 0.04em;
+  padding-top: 0.75rem;
+  border-top: 1px solid rgba(192,122,42,0.07);
+}
+
+/* ── FADE ── */
+.fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ─────────── DESKTOP ─────────── */
+@media (min-width: 768px) {
+  nav { padding: 1.2rem 3rem; }
+  .nav-wsp { font-size: 14px; padding: 0.6rem 1.4rem; }
+
+  /* Hero */
+  .hero { padding: 100px 4rem 5rem; }
+  .hero-title { font-size: clamp(64px, 8vw, 100px); }
+  .hero-sub { font-size: 16px; max-width: 440px; }
+
+  /* Info strip — horizontal */
+  .info-strip { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .info-item { border-bottom: none; border-right: 1px solid var(--borde); padding: 1.6rem 2.5rem; }
+  .info-item:last-child { border-right: none; }
+  .info-value { font-size: 17px; }
+  .info-icon { width: 42px; height: 42px; }
+
+  /* About — two cols */
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 0;
+    gap: 0;
+  }
+  .about-img-desktop {
+    background: linear-gradient(160deg, #3d2b14, #2a1d0d);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    min-height: 520px;
+  }
+  .about-img-desktop::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(45deg,rgba(192,122,42,0.06) 0px,rgba(192,122,42,0.06) 1px,transparent 1px,transparent 52px);
+  }
+  .about-emblem {
+    font-family: 'Playfair Display', serif;
+    font-size: 180px;
+    font-style: italic;
+    color: var(--amber);
+    opacity: 0.08;
+    user-select: none;
+    line-height: 1;
+    position: relative; z-index: 1;
+  }
+  .about-text-col { padding: 5rem 4rem !important; }
+
+  /* Menu */
+  .menu-header { padding: 0 3rem 2.5rem; text-align: center; }
+  .menu-tabs { padding: 0 3rem; justify-content: center; }
+  .menu-section .section-label { justify-content: center; }
+  .menu-grid.active {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(192,122,42,0.07);
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  .menu-item { padding: 1.6rem 2rem; }
+  .menu-item:hover { background: var(--carbon); }
+
+  /* Hours */
+  .hours-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+    padding: 5rem 4rem;
+  }
+  .wsp-btn { width: auto; justify-content: flex-start; }
+
+  /* Ubicacion */
+  .ubicacion-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .ubicacion-text { padding: 5rem 4rem !important; display: flex; flex-direction: column; justify-content: center; }
+  .map-placeholder { height: 100%; min-height: 420px; }
+
+  /* Footer */
+  footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2rem 3rem;
+  }
+  .footer-credit { padding-top: 0; border-top: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">La <span>Leña</span></a>
+  <a href="https://wa.me/5492901000000?text=Hola!%20Quería%20hacer%20una%20reserva" class="nav-wsp">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Reservar
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-label">Desde 2018 · Ushuaia, Patagonia</div>
+  <h1 class="hero-title">Fuego,<br><em>tierra</em><br>y tiempo.</h1>
+  <p class="hero-sub">Cocina de autor con identidad patagónica. Cortes a las brasas, productos del fin del mundo, carta que cambia con las estaciones.</p>
+  <div class="hero-actions">
+    <a href="#menu" class="btn-primary">Ver la carta</a>
+    <a href="https://wa.me/5492901000000" class="btn-ghost">Reservar mesa</a>
+  </div>
+</section>
+
+<!-- INFO STRIP -->
+<div class="info-strip">
+  <a href="https://maps.google.com" class="info-item">
+    <div class="info-icon">📍</div>
+    <div class="info-text">
+      <div class="info-label">Ubicación</div>
+      <div class="info-value">San Martín 482</div>
+      <div class="info-sub">Ushuaia, Tierra del Fuego</div>
+    </div>
+    <div class="info-arrow">→</div>
+  </a>
+  <div class="info-item">
+    <div class="info-icon">🕐</div>
+    <div class="info-text">
+      <div class="info-label">Horarios</div>
+      <div class="info-value">12:00 — 23:30</div>
+      <div class="info-sub">Martes a domingo</div>
+    </div>
+  </div>
+  <a href="https://wa.me/5492901000000" class="info-item">
+    <div class="info-icon">💬</div>
+    <div class="info-text">
+      <div class="info-label">Reservas</div>
+      <div class="info-value">+54 9 2901 000000</div>
+      <div class="info-sub">WhatsApp o llamada</div>
+    </div>
+    <div class="info-arrow">→</div>
+  </a>
+</div>
+
+<!-- ABOUT -->
+<section class="about fade-in" id="nosotros">
+  <div class="about-img-desktop" style="display:none;">
+    <div class="about-emblem">L</div>
+  </div>
+  <div class="about-text-col" style="padding: 3rem 1.25rem;">
+    <div class="section-label">Nuestra historia</div>
+    <h2 class="about-heading">La cocina como <em>memoria</em> del lugar.</h2>
+    <p class="about-body">Nació en 2018 de una obsesión simple: cocinar con lo que el sur tiene de sobra. Cordero de campo abierto, centolla del canal Beagle, hongos de bosque húmedo.</p>
+    <p class="about-body">La Leña es un restaurante pequeño, de fuego lento y carta corta. No buscamos impresionar con la cantidad; buscamos que cada plato valga el viaje.</p>
+    <div class="about-stats">
+      <div class="stat">
+        <span class="stat-num">6</span>
+        <div class="stat-label">años en el sur</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">40</span>
+        <div class="stat-label">cubiertos</div>
+      </div>
+      <div class="stat">
+        <span class="stat-num">100%</span>
+        <div class="stat-label">estacional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU -->
+<section class="menu-section fade-in" id="menu">
+  <div class="menu-header">
+    <div class="section-label">· La carta ·</div>
+    <h2 class="menu-title">Lo que <em>hoy</em> hay.</h2>
+    <p class="menu-desc">La carta cambia según lo que llega. Siempre de temporada, siempre del sur.</p>
+  </div>
+  <div class="menu-tabs">
+    <button class="menu-tab active" onclick="showMenu('entradas',this)">Entradas</button>
+    <button class="menu-tab" onclick="showMenu('principales',this)">Principales</button>
+    <button class="menu-tab" onclick="showMenu('postres',this)">Postres</button>
+    <button class="menu-tab" onclick="showMenu('bebidas',this)">Bebidas</button>
+  </div>
+  <div class="menu-grid active" id="menu-entradas">
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Centolla gratinada</div>
+        <div class="menu-item-desc">Manteca de hierbas y pan de campo tostado.</div>
+        <span class="menu-item-tag">del mar</span>
+      </div>
+      <div class="menu-item-price">$4.200</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Tabla de embutidos</div>
+        <div class="menu-item-desc">Salame de ciervo, jamón serrano, queso de oveja y mostaza de miel.</div>
+        <span class="menu-item-tag">de campo</span>
+      </div>
+      <div class="menu-item-price">$3.500</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Sopa de hongos</div>
+        <div class="menu-item-desc">Hongos de pino, crema, aceite de trufa y crostini de masa madre.</div>
+        <span class="menu-item-tag">del bosque</span>
+      </div>
+      <div class="menu-item-price">$2.800</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Mejillones al vino blanco</div>
+        <div class="menu-item-desc">Con limón, ajo, perejil y pan artesanal.</div>
+        <span class="menu-item-tag">del mar</span>
+      </div>
+      <div class="menu-item-price">$3.100</div>
+    </div>
+  </div>
+  <div class="menu-grid" id="menu-principales">
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Cordero a la cruz</div>
+        <div class="menu-item-desc">Cocción lenta de 6 horas. Papas rústicas y chimichurri.</div>
+        <span class="menu-item-tag">estrella de la casa</span>
+      </div>
+      <div class="menu-item-price">$7.200</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Trucha del río</div>
+        <div class="menu-item-desc">A la plancha con manteca de limón, alcaparras y puré de apio.</div>
+        <span class="menu-item-tag">del río</span>
+      </div>
+      <div class="menu-item-price">$5.800</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Bife de chorizo patagónico</div>
+        <div class="menu-item-desc">400g madurado 28 días. Papas doradas al romero.</div>
+        <span class="menu-item-tag">a las brasas</span>
+      </div>
+      <div class="menu-item-price">$6.900</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Risotto de hongos y ciervo</div>
+        <div class="menu-item-desc">Arbóreo, ragú de ciervo, hongos de pino y parmesano.</div>
+        <span class="menu-item-tag">del bosque</span>
+      </div>
+      <div class="menu-item-price">$5.200</div>
+    </div>
+  </div>
+  <div class="menu-grid" id="menu-postres">
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Torta de calafate</div>
+        <div class="menu-item-desc">Con crema chantilly y salsa de frutos del bosque.</div>
+        <span class="menu-item-tag">clásico</span>
+      </div>
+      <div class="menu-item-price">$2.200</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Budín de pan</div>
+        <div class="menu-item-desc">Tibio, con helado de vainilla artesanal y dulce de leche.</div>
+        <span class="menu-item-tag">de la abuela</span>
+      </div>
+      <div class="menu-item-price">$1.900</div>
+    </div>
+  </div>
+  <div class="menu-grid" id="menu-bebidas">
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Vinos patagónicos</div>
+        <div class="menu-item-desc">Malbec, Pinot Noir, Torrontés. Bodegas del sur.</div>
+      </div>
+      <div class="menu-item-price">desde $2.400</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Cerveza artesanal</div>
+        <div class="menu-item-desc">Rubias, rojizas y stout. Todas locales, todas frías.</div>
+      </div>
+      <div class="menu-item-price">$1.200</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Licor de calafate</div>
+        <div class="menu-item-desc">Digestivo del fin del mundo. Una copa para terminar bien.</div>
+        <span class="menu-item-tag">del sur</span>
+      </div>
+      <div class="menu-item-price">$1.000</div>
+    </div>
+    <div class="menu-item">
+      <div class="menu-item-info">
+        <div class="menu-item-name">Sin alcohol</div>
+        <div class="menu-item-desc">Aguas saborizadas, jugos naturales, té de hierbas.</div>
+      </div>
+      <div class="menu-item-price">desde $600</div>
+    </div>
+  </div>
+</section>
+
+<!-- HORARIOS -->
+<section class="hours-section fade-in" id="horarios">
+  <div>
+    <div class="section-label">Estamos abiertos</div>
+    <h2 class="hours-heading">Cuándo<br>encontrarnos.</h2>
+    <p class="hours-sub">Cerramos los lunes para descansar y preparar la semana.</p>
+    <div class="hours-list">
+      <div class="hours-row">
+        <span class="hours-day">Lunes</span>
+        <span class="hours-closed">cerrado</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Mar — Vie</span>
+        <span class="hours-time">12:00 — 23:30</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Sábados</span>
+        <span class="hours-time">12:00 — 00:00</span>
+      </div>
+      <div class="hours-row">
+        <span class="hours-day">Domingos</span>
+        <span class="hours-time">12:00 — 22:00</span>
+      </div>
+    </div>
+  </div>
+  <div class="hours-cta">
+    <div class="hours-cta-title">¿Vienen en grupo?</div>
+    <p class="hours-cta-body">Para grupos de más de 6 personas o eventos privados, escribinos con anticipación. Armamos un menú especial.</p>
+    <a href="https://wa.me/5492901000000?text=Hola!%20Quería%20consultar%20por%20una%20reserva%20para%20grupo" class="wsp-btn">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Reservar por WhatsApp
+    </a>
+  </div>
+</section>
+
+<!-- UBICACION -->
+<section class="ubicacion-section fade-in" id="ubicacion">
+  <div class="ubicacion-text">
+    <div class="section-label">Cómo llegar</div>
+    <h2 class="ubicacion-heading">En el centro de Ushuaia.</h2>
+    <p class="ubicacion-address">
+      <strong>San Martín 482</strong>
+      Entre Juana Fadul y Deloqui<br>
+      Ushuaia, Tierra del Fuego<br><br>
+      A dos cuadras del puerto. Estacionamiento enfrente.
+    </p>
+    <a href="https://maps.google.com" class="btn-ghost" style="font-size:13px;">Abrir en Google Maps →</a>
+  </div>
+  <div class="map-placeholder">
+    <div class="map-grid"></div>
+    <div class="map-pin">
+      <div class="map-pin-dot"></div>
+      <div class="map-label">La Leña · San Martín 482</div>
+    </div>
+    <a href="https://maps.google.com" class="map-open-btn">Ver en Maps →</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">La <span>Leña</span></div>
+  <ul class="footer-links">
+    <li><a href="#menu">Menú</a></li>
+    <li><a href="#horarios">Horarios</a></li>
+    <li><a href="#ubicacion">Ubicación</a></li>
+  </ul>
+  <div class="footer-credit">Desarrollado por Limen · limen.agency</div>
+</footer>
+
+<script>
+  function showMenu(id, btn) {
+    document.querySelectorAll('.menu-grid').forEach(g => g.classList.remove('active'));
+    document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('menu-' + id).classList.add('active');
+    btn.classList.add('active');
+  }
+
+  // Scroll fade
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+    });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Show about image col on desktop
+  function handleResize() {
+    const imgCol = document.querySelector('.about-img-desktop');
+    if (imgCol) imgCol.style.display = window.innerWidth >= 768 ? 'flex' : 'none';
+    const textCol = document.querySelector('.about-text-col');
+    if (textCol) textCol.style.padding = window.innerWidth >= 768 ? '5rem 4rem' : '3rem 1.25rem';
+  }
+  handleResize();
+  window.addEventListener('resize', handleResize);
+</script>
+</body>
+</html>

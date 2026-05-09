@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LITORAL — Banda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;500;700;900&family=Epilogue:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --void:     #06030f;
+  --deep:     #0d0618;
+  --surface:  #130a22;
+  --lift:     #1e1035;
+  --magenta:  #ff1f6e;
+  --mag-dim:  rgba(255,31,110,0.15);
+  --mag-glow: rgba(255,31,110,0.35);
+  --violet:   #7b2fff;
+  --lavanda:  #c4a8ff;
+  --crema:    #f5f0ff;
+  --humo:     #7a6a9a;
+  --humo-dim: #3d2f5a;
+  --borde:    rgba(196,168,255,0.1);
+}
+
+html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--void);
+  color: var(--crema);
+  font-family: 'Epilogue', sans-serif;
+  font-weight: 300;
+  overflow-x: hidden;
+}
+
+/* ══ GLITCH ══ */
+@keyframes glitch-1 {
+  0%, 90%, 100% { clip-path: inset(0 0 100% 0); transform: translateX(0); }
+  92%  { clip-path: inset(8% 0 58% 0); transform: translateX(-4px); }
+  94%  { clip-path: inset(40% 0 30% 0); transform: translateX(4px); }
+  96%  { clip-path: inset(70% 0 8% 0);  transform: translateX(-2px); }
+}
+@keyframes glitch-2 {
+  0%, 88%, 100% { clip-path: inset(0 0 100% 0); transform: translateX(0); }
+  90%  { clip-path: inset(15% 0 50% 0); transform: translateX(6px); color: var(--magenta); }
+  92%  { clip-path: inset(55% 0 20% 0); transform: translateX(-6px); color: var(--violet); }
+  94%  { clip-path: inset(80% 0 5% 0);  transform: translateX(3px); }
+}
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ══ NAV ══ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(6,3,15,0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--borde);
+}
+
+.nav-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: var(--crema);
+  text-decoration: none;
+  text-transform: uppercase;
+}
+.nav-logo span { color: var(--magenta); }
+
+.nav-right { display: flex; align-items: center; gap: 0.6rem; }
+
+.nav-spotify {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: #1DB954;
+  color: white;
+  font-family: 'Epilogue', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0.45rem 0.9rem;
+  border-radius: 100px;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: filter 0.15s;
+}
+.nav-spotify:active { filter: brightness(1.1); }
+.nav-spotify svg { width: 14px; height: 14px; fill: white; flex-shrink: 0; }
+
+.nav-ig {
+  border: 1px solid var(--borde);
+  color: var(--humo);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 0.45rem 0.8rem;
+  border-radius: 100px;
+  text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav-ig:active { border-color: var(--magenta); color: var(--magenta); }
+
+/* ══ HERO ══ */
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 80px 1.25rem 0;
+  position: relative;
+  overflow: hidden;
+  background: var(--void);
+}
+
+/* Gradient atmosphere */
+.hero-atmos {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 50% at 80% 20%, rgba(123,47,255,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 20% 80%, rgba(255,31,110,0.08) 0%, transparent 60%);
+}
+
+/* Scanline effect */
+.hero-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+.hero-scan::after {
+  content: '';
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(255,31,110,0.3), transparent);
+  animation: scanline 6s linear infinite;
+}
+
+.hero-year {
+  position: absolute;
+  top: 90px; right: 1.25rem;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  color: var(--magenta);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  opacity: 0.7;
+  z-index: 2;
+}
+
+/* Band name with glitch */
+.hero-band {
+  position: relative;
+  z-index: 2;
+  user-select: none;
+}
+
+.hero-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(68px, 19vw, 160px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.85;
+  color: var(--crema);
+  text-transform: uppercase;
+  position: relative;
+  display: block;
+}
+
+/* Glitch layers */
+.hero-name-g1 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(68px, 19vw, 160px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.85;
+  color: var(--magenta);
+  text-transform: uppercase;
+  position: absolute;
+  top: 0; left: 0;
+  animation: glitch-1 5s steps(1) infinite;
+}
+
+.hero-name-g2 {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(68px, 19vw, 160px);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  line-height: 0.85;
+  color: var(--violet);
+  text-transform: uppercase;
+  position: absolute;
+  top: 0; left: 0;
+  animation: glitch-2 5s steps(1) infinite;
+}
+
+.hero-sub-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0 0;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-genre {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--humo);
+  border: 1px solid var(--borde);
+  padding: 0.35rem 0.8rem;
+  border-radius: 100px;
+}
+
+.hero-new {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.hero-new::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--magenta);
+  border-radius: 50%;
+  box-shadow: 0 0 8px var(--magenta);
+  animation: blink 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.2;} }
+
+.hero-mag-line {
+  height: 2px;
+  background: linear-gradient(to right, var(--magenta), var(--violet), transparent);
+  margin: 1.25rem 0 0;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 16px var(--mag-glow);
+}
+
+.hero-scroll-bar {
+  background: rgba(13,6,24,0.97);
+  border-top: 1px solid var(--borde);
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  position: relative;
+  z-index: 2;
+}
+.hero-stat {
+  text-align: center;
+  flex: 1;
+  border-right: 1px solid var(--borde);
+  padding: 0.2rem 0;
+}
+.hero-stat:last-child { border-right: none; }
+.hero-stat-num {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--magenta);
+  line-height: 1;
+  display: block;
+}
+.hero-stat-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--humo);
+  margin-top: 0.2rem;
+}
+
+/* ══ MARQUEE ══ */
+.marquee-wrap {
+  position: relative;
+  height: 48px;
+  overflow: hidden;
+  background: var(--magenta);
+  display: flex;
+  align-items: center;
+}
+.marquee-track {
+  display: inline-flex;
+  animation: marquee 16s linear infinite;
+  white-space: nowrap;
+}
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 2rem;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--void);
+}
+.marquee-dot { opacity: 0.4; }
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ══ SECTION UTIL ══ */
+.s-eyebrow {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--magenta);
+  margin-bottom: 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.s-eyebrow::before { content:''; width:16px; height:1px; background:var(--magenta); flex-shrink:0; }
+
+.s-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(30px, 8vw, 52px);
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--crema);
+  line-height: 0.92;
+  margin-bottom: 1rem;
+}
+
+/* ══ ÚLTIMO LANZAMIENTO / SPOTIFY ══ */
+.lanzamiento-section {
+  padding: 4rem 1.25rem;
+  background: var(--deep);
+  position: relative;
+  overflow: hidden;
+}
+
+.lanzamiento-section::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(123,47,255,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Album art — geometric CSS */
+.album-art {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1;
+  margin: 2rem 0;
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--borde);
+  overflow: hidden;
+}
+
+.album-inner {
+  position: absolute;
+  inset: 16px;
+  background: var(--lift);
+  border: 1px solid rgba(255,31,110,0.2);
+}
+
+/* Geometric abstract art inside album */
+.album-geo {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.geo-circle-1 {
+  position: absolute;
+  width: 200%;
+  padding-bottom: 200%;
+  border-radius: 50%;
+  border: 1px solid rgba(255,31,110,0.2);
+  top: -50%; left: -50%;
+}
+.geo-circle-2 {
+  position: absolute;
+  width: 140%;
+  padding-bottom: 140%;
+  border-radius: 50%;
+  border: 1px solid rgba(123,47,255,0.3);
+  top: 10%; left: -20%;
+}
+.geo-line-1 {
+  position: absolute;
+  width: 2px;
+  height: 100%;
+  background: linear-gradient(to bottom, transparent, rgba(255,31,110,0.4), transparent);
+  left: 40%;
+  transform: rotate(25deg) translateX(-50%);
+  transform-origin: top;
+}
+.geo-line-2 {
+  position: absolute;
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(to right, transparent, rgba(196,168,255,0.3), transparent);
+  top: 60%;
+}
+.geo-dot {
+  position: absolute;
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--magenta);
+  filter: blur(20px);
+  opacity: 0.5;
+  bottom: 20%; right: 20%;
+  animation: geoPulse 3s ease-in-out infinite alternate;
+}
+@keyframes geoPulse {
+  from { transform: scale(1); opacity: 0.4; }
+  to   { transform: scale(1.6); opacity: 0.7; }
+}
+
+.album-title-overlay {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 1rem;
+  background: linear-gradient(to top, rgba(13,6,24,0.95), transparent);
+  z-index: 2;
+}
+.album-ep-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--crema);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.album-ep-sub {
+  font-size: 11px;
+  color: var(--humo);
+  margin-top: 0.2rem;
+  letter-spacing: 0.08em;
+}
+
+/* Spotify embed */
+.spotify-wrap {
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--borde);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+  margin-top: 1.5rem;
+}
+
+.spotify-header {
+  background: var(--surface);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  border-bottom: 1px solid var(--borde);
+}
+.spotify-logo {
+  width: 20px; height: 20px;
+  background: #1DB954;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.spotify-logo svg { width: 12px; height: 12px; fill: black; }
+.spotify-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--humo);
+  letter-spacing: 0.06em;
+}
+.spotify-label span { color: #1DB954; }
+
+/* Real Spotify iframe embed */
+.spotify-frame {
+  width: 100%;
+  height: 152px;
+  border: none;
+  display: block;
+  background: #121212;
+}
+
+.tracklist {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.track {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--borde);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.track:active { background: var(--lift); }
+.track-num {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  color: var(--humo-dim);
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.track-info { flex: 1; min-width: 0; }
+.track-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--crema);
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.track-feat { font-size: 12px; color: var(--humo); }
+.track-duration {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 11px;
+  color: var(--humo-dim);
+  flex-shrink: 0;
+}
+.track-play {
+  width: 28px; height: 28px;
+  background: var(--mag-dim);
+  border: 1px solid rgba(255,31,110,0.2);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.track:hover .track-play { background: var(--magenta); }
+
+/* ══ BIO ══ */
+.bio-section {
+  padding: 4rem 1.25rem;
+  background: var(--void);
+  position: relative;
+  overflow: hidden;
+}
+
+.bio-quote {
+  font-family: 'Epilogue', sans-serif;
+  font-size: clamp(22px, 5.5vw, 36px);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--crema);
+  line-height: 1.4;
+  margin: 2rem 0;
+  padding-left: 1.5rem;
+  border-left: 3px solid var(--magenta);
+}
+
+.bio-body {
+  font-size: 15px;
+  color: var(--humo);
+  line-height: 1.9;
+  margin-bottom: 1rem;
+}
+
+.bio-body strong { color: var(--crema); font-weight: 500; }
+
+/* ══ DIAGONAL ══ */
+.diag-wrap {
+  height: 64px;
+  overflow: hidden;
+  position: relative;
+  background: var(--surface);
+}
+.diag-strip {
+  position: absolute;
+  left: -10%; right: -10%;
+  top: 50%;
+  transform: translateY(-50%) rotate(-1.5deg);
+  background: var(--lift);
+  border-top: 1px solid rgba(255,31,110,0.3);
+  border-bottom: 1px solid rgba(255,31,110,0.3);
+  padding: 0.6rem 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.diag-track {
+  display: inline-flex;
+  animation: marquee 24s linear infinite reverse;
+}
+.diag-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 2rem;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--magenta);
+}
+.diag-sep { opacity: 0.35; }
+
+/* ══ TOUR ══ */
+.tour-section {
+  padding: 4rem 1.25rem;
+  background: var(--deep);
+}
+
+.tour-list {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.tour-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--borde);
+  transition: background 0.15s, border-color 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+
+.tour-item::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--magenta);
+  transform: scaleY(0);
+  transition: transform 0.2s;
+}
+.tour-item:hover::before { transform: scaleY(1); }
+.tour-item:hover { background: var(--lift); border-color: rgba(255,31,110,0.2); }
+
+.tour-date {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--magenta);
+  flex-shrink: 0;
+  width: 52px;
+  text-align: center;
+  letter-spacing: 0.05em;
+}
+
+.tour-line {
+  width: 1px;
+  height: 36px;
+  background: var(--borde);
+  flex-shrink: 0;
+}
+
+.tour-info { flex: 1; min-width: 0; }
+.tour-venue {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--crema);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.tour-city {
+  font-size: 12px;
+  color: var(--humo);
+  margin-top: 0.1rem;
+  letter-spacing: 0.06em;
+}
+
+.tour-sold {
+  font-family: 'Epilogue', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--humo-dim);
+  flex-shrink: 0;
+  text-decoration: line-through;
+}
+
+.tour-ticket {
+  background: var(--mag-dim);
+  border: 1px solid rgba(255,31,110,0.3);
+  color: var(--magenta);
+  font-family: 'Epilogue', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  text-decoration: none;
+  border-radius: 4px;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+.tour-ticket:active { background: var(--magenta); color: var(--void); }
+
+.tour-all {
+  margin-top: 1.5rem;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--humo);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: color 0.15s;
+}
+.tour-all:hover { color: var(--magenta); }
+
+/* ══ MERCH ══ */
+.merch-section {
+  padding: 4rem 1.25rem;
+  background: var(--void);
+}
+
+.merch-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 2rem;
+}
+
+.merch-card {
+  background: var(--surface);
+  border: 1px solid var(--borde);
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.merch-card:hover { border-color: rgba(255,31,110,0.3); }
+.merch-card:first-child { grid-column: 1 / -1; }
+
+.merch-img {
+  aspect-ratio: 1;
+  background: var(--lift);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 52px;
+  position: relative;
+  overflow: hidden;
+}
+.merch-card:first-child .merch-img { aspect-ratio: 16/7; font-size: 64px; }
+
+/* Abstract merch bg */
+.merch-img::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(255,31,110,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,31,110,0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.merch-emoji { position: relative; z-index: 1; opacity: 0.6; filter: grayscale(0.4); }
+
+.merch-badge {
+  position: absolute;
+  top: 0.75rem; right: 0.75rem;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  background: var(--magenta);
+  color: var(--void);
+  padding: 0.2rem 0.5rem;
+  z-index: 2;
+}
+
+.merch-info { padding: 0.9rem; }
+.merch-name {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--crema);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+  line-height: 1.2;
+}
+.merch-sub { font-size: 12px; color: var(--humo); margin-bottom: 0.5rem; }
+.merch-price {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--magenta);
+  letter-spacing: 0.02em;
+}
+
+.merch-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: var(--magenta);
+  color: var(--void);
+  padding: 0.9rem 1.5rem;
+  font-family: 'Unbounded', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  margin-top: 2rem;
+  width: 100%;
+  transition: filter 0.15s;
+  border-radius: 4px;
+  display: block;
+  text-align: center;
+}
+.merch-cta:active { filter: brightness(1.1); }
+
+/* ══ REDES ══ */
+.redes-section {
+  padding: 3rem 1.25rem;
+  background: var(--deep);
+  text-align: center;
+  border-top: 1px solid var(--borde);
+}
+
+.redes-title {
+  font-family: 'Unbounded', sans-serif;
+  font-size: clamp(28px, 8vw, 48px);
+  font-weight: 900;
+  color: var(--crema);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  margin-bottom: 0.5rem;
+}
+.redes-title span { color: var(--magenta); }
+
+.redes-sub {
+  font-size: 14px;
+  color: var(--humo);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.redes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-bottom: 1.5rem;
+}
+.red-cell {
+  background: var(--surface);
+  border: 1px solid var(--borde);
+  aspect-ratio: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  color: var(--humo);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  border-radius: 8px;
+}
+.red-cell:active { background: var(--lift); color: var(--magenta); border-color: rgba(255,31,110,0.3); }
+.red-cell-icon { font-size: 24px; }
+.red-cell-name { font-size: 10px; font-weight: 600; letter-spacing: 0.15em; text-transform: uppercase; }
+.red-cell-handle { font-size: 11px; color: var(--humo-dim); }
+
+/* ══ FOOTER ══ */
+footer {
+  background: var(--void);
+  border-top: 1px solid var(--borde);
+  padding: 2.5rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.footer-brand { display: flex; flex-direction: column; gap: 0.3rem; }
+.footer-logo {
+  font-family: 'Unbounded', sans-serif;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  color: var(--crema);
+  line-height: 1;
+}
+.footer-logo span { color: var(--magenta); }
+.footer-tagline {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--humo-dim);
+  line-height: 1.4;
+}
+.footer-links { display: flex; gap: 1.25rem; list-style: none; flex-wrap: wrap; }
+.footer-links a {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--humo);
+  text-decoration: none;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.15s;
+}
+.footer-links a:hover { color: var(--magenta); }
+.footer-credit {
+  font-size: 11px;
+  color: rgba(122,106,154,0.25);
+  letter-spacing: 0.08em;
+  padding-top: 1rem;
+  border-top: 1px solid var(--borde);
+}
+
+/* ══ FADE ══ */
+.fade-in { opacity: 0; transform: translateY(18px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+
+/* ══ DESKTOP ══ */
+@media (min-width: 768px) {
+  nav { padding: 1rem 3rem; }
+
+  .hero { padding: 100px 4rem 0; }
+  .hero-year { right: 3rem; }
+
+  .lanzamiento-section {
+    padding: 6rem 4rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .lanzamiento-right { padding-top: 0; }
+  .album-art { max-width: 100%; margin: 0; }
+
+  .bio-section { padding: 6rem 4rem; }
+  .bio-body { max-width: 680px; }
+
+  .tour-section { padding: 6rem 4rem; }
+
+  .merch-section { padding: 6rem 4rem; }
+  .merch-grid { grid-template-columns: repeat(3, 1fr); }
+  .merch-card:first-child { grid-column: auto; }
+  .merch-card:first-child .merch-img { aspect-ratio: 1; font-size: 52px; }
+
+  .redes-section { padding: 5rem 4rem; }
+
+  footer { flex-direction: row; align-items: center; justify-content: space-between; padding: 2.5rem 4rem; }
+  .footer-credit { padding-top: 0; border-top: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <a href="#" class="nav-logo">LIT<span>ORAL</span></a>
+  <div class="nav-right">
+    <a href="https://open.spotify.com/artist/ARTIST_ID" class="nav-spotify" target="_blank">
+      <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+      Spotify
+    </a>
+    <a href="https://instagram.com/litoral.banda" class="nav-ig">IG</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-atmos"></div>
+  <div class="hero-scan"></div>
+  <div class="hero-year">2025 · TEMPORADA SALVAJE</div>
+  <div class="hero-band">
+    <span class="hero-name">LITORAL</span>
+    <span class="hero-name-g1" aria-hidden="true">LITORAL</span>
+    <span class="hero-name-g2" aria-hidden="true">LITORAL</span>
+  </div>
+  <div class="hero-sub-row">
+    <span class="hero-genre">Indie / Electrónico</span>
+    <span class="hero-new">Nuevo EP disponible</span>
+  </div>
+  <div class="hero-mag-line"></div>
+  <div class="hero-scroll-bar">
+    <div class="hero-stat">
+      <span class="hero-stat-num">4</span>
+      <div class="hero-stat-label">años activos</div>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">3</span>
+      <div class="hero-stat-label">discos</div>
+    </div>
+    <div class="hero-stat">
+      <span class="hero-stat-num">14</span>
+      <div class="hero-stat-label">fechas 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MARQUEE ══ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">LITORAL <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">NUEVO EP <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">TEMPORADA SALVAJE <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">EN VIVO 2025 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">YA DISPONIBLE <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">LITORAL <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">NUEVO EP <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">TEMPORADA SALVAJE <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">EN VIVO 2025 <span class="marquee-dot">✦</span></span>
+    <span class="marquee-item">YA DISPONIBLE <span class="marquee-dot">✦</span></span>
+  </div>
+</div>
+
+<!-- ══ MÚSICA ══ -->
+<section class="lanzamiento-section fade-in" id="musica">
+  <div class="lanzamiento-left">
+    <div class="s-eyebrow">// Último lanzamiento</div>
+    <div class="s-title">TEMPORADA<br>SALVAJE EP</div>
+    <p style="font-size:14px; color:var(--humo); line-height:1.8; margin-bottom:1.5rem;">6 tracks. Grabado en 3 semanas en un estudio en Palermo. Mezcla de post-punk, electrónica y algo que todavía no tiene nombre. — Lanzamiento: 14 marzo 2025</p>
+    <div class="album-art">
+      <div class="album-inner">
+        <div class="album-geo">
+          <div class="geo-circle-1"></div>
+          <div class="geo-circle-2"></div>
+          <div class="geo-line-1"></div>
+          <div class="geo-line-2"></div>
+          <div class="geo-dot"></div>
+        </div>
+        <div class="album-title-overlay">
+          <div class="album-ep-name">Temporada Salvaje</div>
+          <div class="album-ep-sub">LITORAL · 2025</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="lanzamiento-right">
+    <!-- Spotify Embed — reemplazar ARTIST_ID con el ID real de Spotify -->
+    <div class="spotify-wrap">
+      <div class="spotify-header">
+        <div class="spotify-logo">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        </div>
+        <div class="spotify-label">Escuchar en <span>Spotify</span></div>
+      </div>
+      <!-- ↓ Reemplazá ALBUM_ID con el ID real del álbum en Spotify -->
+      <iframe class="spotify-frame"
+        src="https://open.spotify.com/embed/album/4aawyAB9vmqN3uQ7FjRGTy?utm_source=generator&theme=0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy">
+      </iframe>
+    </div>
+
+    <!-- Tracklist manual -->
+    <div class="tracklist">
+      <div class="track">
+        <div class="track-num">01</div>
+        <div class="track-info">
+          <div class="track-name">Corriente Baja</div>
+          <div class="track-feat">single</div>
+        </div>
+        <div class="track-duration">3:42</div>
+        <div class="track-play">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">02</div>
+        <div class="track-info">
+          <div class="track-name">Fauna</div>
+          <div class="track-feat">ft. Marta V.</div>
+        </div>
+        <div class="track-duration">4:08</div>
+        <div class="track-play">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">03</div>
+        <div class="track-info">
+          <div class="track-name">Temporada Salvaje</div>
+          <div class="track-feat">título</div>
+        </div>
+        <div class="track-duration">5:21</div>
+        <div class="track-play">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">04</div>
+        <div class="track-info">
+          <div class="track-name">El Peso del Aire</div>
+          <div class="track-feat"></div>
+        </div>
+        <div class="track-duration">3:55</div>
+        <div class="track-play">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">05</div>
+        <div class="track-info">
+          <div class="track-name">Deriva</div>
+          <div class="track-feat">instrumental</div>
+        </div>
+        <div class="track-duration">6:10</div>
+        <div class="track-play">▶</div>
+      </div>
+      <div class="track">
+        <div class="track-num">06</div>
+        <div class="track-info">
+          <div class="track-name">Norte</div>
+          <div class="track-feat">cierre</div>
+        </div>
+        <div class="track-duration">4:44</div>
+        <div class="track-play">▶</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ BIO ══ -->
+<section class="bio-section fade-in">
+  <div class="s-eyebrow">// La banda</div>
+  <div class="s-title">QUIÉNES<br>SOMOS</div>
+  <div class="bio-quote">"No sabíamos qué género estábamos haciendo. Todavía no sabemos. Eso nos parece bien."</div>
+  <p class="bio-body">LITORAL nació en 2021 en Buenos Aires, de una sesión de ensayo que se fue de las manos. <strong>Cuatro personas con backgrounds distintos</strong> — electrónica, jazz, punk y nada — que encontraron un sonido en común justo cuando dejaron de buscarlo.</p>
+  <p class="bio-body" style="margin-top:1rem;">Dos discos en cuatro años, cientos de shows en el país y algunos en el exterior. <strong>Temporada Salvaje</strong> es el tercer capítulo: más oscuro, más eléctrico, más honesto sobre lo que somos.</p>
+</section>
+
+<!-- ══ DIAGONAL ══ -->
+<div class="diag-wrap">
+  <div class="diag-strip">
+    <div class="diag-track">
+      <span class="diag-item">BUENOS AIRES <span class="diag-sep">—</span></span>
+      <span class="diag-item">ROSARIO <span class="diag-sep">—</span></span>
+      <span class="diag-item">CÓRDOBA <span class="diag-sep">—</span></span>
+      <span class="diag-item">MENDOZA <span class="diag-sep">—</span></span>
+      <span class="diag-item">SANTIAGO <span class="diag-sep">—</span></span>
+      <span class="diag-item">MONTEVIDEO <span class="diag-sep">—</span></span>
+      <span class="diag-item">BUENOS AIRES <span class="diag-sep">—</span></span>
+      <span class="diag-item">ROSARIO <span class="diag-sep">—</span></span>
+      <span class="diag-item">CÓRDOBA <span class="diag-sep">—</span></span>
+      <span class="diag-item">MENDOZA <span class="diag-sep">—</span></span>
+      <span class="diag-item">SANTIAGO <span class="diag-sep">—</span></span>
+      <span class="diag-item">MONTEVIDEO <span class="diag-sep">—</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOUR ══ -->
+<section class="tour-section fade-in" id="tour">
+  <div class="s-eyebrow">// Fechas</div>
+  <div class="s-title">EN<br>VIVO</div>
+  <div class="tour-list">
+    <div class="tour-item">
+      <div class="tour-date">14<br><span style="font-size:9px;color:var(--humo);font-family:'Epilogue',sans-serif;font-weight:500;">JUN</span></div>
+      <div class="tour-line"></div>
+      <div class="tour-info">
+        <div class="tour-venue">Niceto Club</div>
+        <div class="tour-city">Buenos Aires · CABA</div>
+      </div>
+      <a href="#" class="tour-ticket">Entradas →</a>
+    </div>
+    <div class="tour-item">
+      <div class="tour-date">21<br><span style="font-size:9px;color:var(--humo);font-family:'Epilogue',sans-serif;font-weight:500;">JUN</span></div>
+      <div class="tour-line"></div>
+      <div class="tour-info">
+        <div class="tour-venue">La Mona</div>
+        <div class="tour-city">Rosario · Santa Fe</div>
+      </div>
+      <a href="#" class="tour-ticket">Entradas →</a>
+    </div>
+    <div class="tour-item">
+      <div class="tour-date">05<br><span style="font-size:9px;color:var(--humo);font-family:'Epilogue',sans-serif;font-weight:500;">JUL</span></div>
+      <div class="tour-line"></div>
+      <div class="tour-info">
+        <div class="tour-venue">La Trastienda</div>
+        <div class="tour-city">Buenos Aires · CABA</div>
+      </div>
+      <a href="#" class="tour-ticket">Entradas →</a>
+    </div>
+    <div class="tour-item">
+      <div class="tour-date">19<br><span style="font-size:9px;color:var(--humo);font-family:'Epilogue',sans-serif;font-weight:500;">JUL</span></div>
+      <div class="tour-line"></div>
+      <div class="tour-info">
+        <div class="tour-venue">Movistar Arena</div>
+        <div class="tour-city">Santiago · Chile</div>
+      </div>
+      <a href="#" class="tour-ticket">Entradas →</a>
+    </div>
+    <div class="tour-item" style="opacity:0.45;">
+      <div class="tour-date">03<br><span style="font-size:9px;color:var(--humo);font-family:'Epilogue',sans-serif;font-weight:500;">MAY</span></div>
+      <div class="tour-line"></div>
+      <div class="tour-info">
+        <div class="tour-venue">Club Paraguay</div>
+        <div class="tour-city">Córdoba · Argentina</div>
+      </div>
+      <div class="tour-sold">Agotado</div>
+    </div>
+  </div>
+  <a href="#" class="tour-all">Ver todas las fechas →</a>
+</section>
+
+<!-- ══ MERCH ══ -->
+<section class="merch-section fade-in" id="merch">
+  <div class="s-eyebrow">// Tienda</div>
+  <div class="s-title">MERCH</div>
+  <div class="merch-grid">
+    <div class="merch-card">
+      <div class="merch-img">
+        <span class="merch-emoji">👕</span>
+        <span class="merch-badge">nuevo</span>
+      </div>
+      <div class="merch-info">
+        <div class="merch-name">Remera Temporada Salvaje</div>
+        <div class="merch-sub">100% algodón · S al XXL · Negro / Blanco</div>
+        <div class="merch-price">$18.000</div>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img">
+        <span class="merch-emoji">🧥</span>
+        <span class="merch-badge">limitado</span>
+      </div>
+      <div class="merch-info">
+        <div class="merch-name">Buzo Corriente</div>
+        <div class="merch-sub">Oversized · S al XL</div>
+        <div class="merch-price">$35.000</div>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img">
+        <span class="merch-emoji">🎵</span>
+      </div>
+      <div class="merch-info">
+        <div class="merch-name">Vinilo Temporada Salvaje</div>
+        <div class="merch-sub">180g · Con poster firmado</div>
+        <div class="merch-price">$42.000</div>
+      </div>
+    </div>
+    <div class="merch-card">
+      <div class="merch-img">
+        <span class="merch-emoji">🎒</span>
+      </div>
+      <div class="merch-info">
+        <div class="merch-name">Tote Bag LITORAL</div>
+        <div class="merch-sub">Canvas · Serigrafía · Única</div>
+        <div class="merch-price">$9.000</div>
+      </div>
+    </div>
+  </div>
+  <a href="#" class="merch-cta">Ver tienda completa →</a>
+</section>
+
+<!-- ══ REDES ══ -->
+<section class="redes-section fade-in">
+  <div class="redes-title">SEGUÍ A<br><span>LITORAL</span></div>
+  <p class="redes-sub">Shows en vivo, detrás de escena y todo lo que pasa entre un disco y el siguiente.</p>
+  <div class="redes-grid">
+    <a href="https://instagram.com/litoral.banda" class="red-cell">
+      <div class="red-cell-icon">📸</div>
+      <div class="red-cell-name">Instagram</div>
+      <div class="red-cell-handle">@litoral.banda</div>
+    </a>
+    <a href="https://open.spotify.com" class="red-cell">
+      <div class="red-cell-icon">🎵</div>
+      <div class="red-cell-name">Spotify</div>
+      <div class="red-cell-handle">LITORAL</div>
+    </a>
+    <a href="https://youtube.com" class="red-cell">
+      <div class="red-cell-icon">▶️</div>
+      <div class="red-cell-name">YouTube</div>
+      <div class="red-cell-handle">@litoralbanda</div>
+    </a>
+  </div>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="footer-brand">
+    <div class="footer-logo">LIT<span>ORAL</span></div>
+    <div class="footer-tagline">Buenos Aires · Indie / Electrónico · 2021–2025</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#musica">Música</a></li>
+    <li><a href="#tour">Tour</a></li>
+    <li><a href="#merch">Merch</a></li>
+  </ul>
+  <div class="footer-credit">Desarrollado por Limen · limen.agency</div>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.07 });
+  document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
