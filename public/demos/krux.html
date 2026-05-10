@@ -787,6 +787,295 @@ footer {
   .footer-credit { padding-top: 0; border-top: none; }
   .footer-tagline { margin-top: -0.5rem; }
 }
+
+/* ══ CART ══ */
+.cart-overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 400;
+  opacity: 0; visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+  backdrop-filter: blur(4px);
+}
+.cart-overlay.open { opacity: 1; visibility: visible; }
+
+.cart-drawer {
+  position: fixed;
+  top: 0; right: 0; bottom: 0;
+  width: min(420px, 100vw);
+  background: var(--carbon);
+  border-left: 2px solid var(--neon);
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.cart-drawer.open { transform: translateX(0); }
+
+.cart-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(212,255,0,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+}
+.cart-header-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 22px;
+  letter-spacing: 0.12em;
+  color: var(--blanco);
+}
+.cart-header-title span { color: var(--neon); }
+.cart-close {
+  width: 36px; height: 36px;
+  border: 1px solid rgba(212,255,0,0.2);
+  background: none;
+  color: var(--humo);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s, color 0.15s;
+}
+.cart-close:hover { border-color: var(--neon); color: var(--neon); }
+
+.cart-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem 1.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--neon) transparent;
+}
+
+.cart-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+  color: var(--humo);
+  text-align: center;
+}
+.cart-empty-icon { font-size: 48px; opacity: 0.3; }
+.cart-empty-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.1em;
+  color: var(--humo);
+}
+
+.cart-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  align-items: flex-start;
+}
+.cart-item-emoji {
+  width: 52px; height: 52px;
+  background: var(--grafito);
+  border: 1px solid rgba(212,255,0,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.cart-item-info { flex: 1; min-width: 0; }
+.cart-item-name {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.06em;
+  color: var(--blanco);
+  margin-bottom: 0.15rem;
+}
+.cart-item-meta {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  color: var(--humo);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+.cart-item-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 16px;
+  color: var(--neon);
+  letter-spacing: 0.05em;
+}
+.cart-item-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+.qty-btn {
+  width: 24px; height: 24px;
+  border: 1px solid rgba(212,255,0,0.3);
+  background: none;
+  color: var(--neon);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  font-family: 'Space Mono', monospace;
+  line-height: 1;
+}
+.qty-btn:hover { background: rgba(212,255,0,0.1); }
+.qty-num {
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  color: var(--blanco);
+  min-width: 20px;
+  text-align: center;
+}
+.cart-remove {
+  background: none;
+  border: none;
+  color: rgba(136,136,136,0.5);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0.25rem;
+  transition: color 0.15s;
+  margin-left: auto;
+  flex-shrink: 0;
+}
+.cart-remove:hover { color: #ff4444; }
+
+.cart-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid rgba(212,255,0,0.12);
+  flex-shrink: 0;
+}
+.cart-total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+.cart-total-label {
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--humo);
+}
+.cart-total-price {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: var(--neon);
+  letter-spacing: 0.05em;
+  text-shadow: 0 0 12px rgba(212,255,0,0.4);
+}
+.cart-checkout-btn {
+  width: 100%;
+  padding: 1rem;
+  background: var(--neon);
+  color: var(--negro);
+  font-family: 'Space Mono', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.15s, box-shadow 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+.cart-checkout-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 24px rgba(212,255,0,0.4);
+}
+.cart-checkout-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  filter: none;
+  box-shadow: none;
+}
+
+/* Nav cart btn */
+.nav-cart-btn {
+  position: relative;
+  border: 1px solid rgba(212,255,0,0.3);
+  background: none;
+  color: var(--blanco);
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  font-family: 'Space Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: border-color 0.15s, color 0.15s;
+}
+.nav-cart-btn:hover { border-color: var(--neon); color: var(--neon); }
+.cart-count {
+  position: absolute;
+  top: -6px; right: -6px;
+  width: 16px; height: 16px;
+  background: var(--neon);
+  color: var(--negro);
+  font-size: 9px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0;
+  transform: scale(0);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.cart-count.visible { opacity: 1; transform: scale(1); }
+
+/* Add to cart btn on product */
+.add-to-cart {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: transparent;
+  border: 1px solid rgba(212,255,0,0.35);
+  color: var(--neon);
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.6rem;
+}
+.add-to-cart:hover { background: var(--neon); color: var(--negro); border-color: var(--neon); }
+.add-to-cart.added { background: var(--neon); color: var(--negro); border-color: var(--neon); }
+
+/* Size selector */
+.size-select {
+  width: 100%;
+  margin-top: 0.5rem;
+  background: var(--negro);
+  border: 1px solid rgba(212,255,0,0.2);
+  color: var(--humo);
+  font-family: 'Space Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.size-select:focus { outline: none; border-color: var(--neon); color: var(--blanco); }
+
+/* Added flash */
+@keyframes addedFlash {
+  0% { box-shadow: 0 0 0 0 rgba(212,255,0,0.6); }
+  100% { box-shadow: 0 0 0 12px rgba(212,255,0,0); }
+}
+.cat-item.flash { animation: addedFlash 0.4s ease-out; }
+
 </style>
 </head>
 <body>
@@ -798,6 +1087,10 @@ footer {
   <a href="#" class="nav-logo">KRU<span>X</span></a>
   <div class="nav-right">
     <a href="#catalogo" class="nav-tag">Catálogo</a>
+    <button class="nav-cart-btn" onclick="toggleCart()">
+      <span>🛒</span> CARRITO
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
     <a href="https://instagram.com/krux.ar" class="nav-tag-filled">IG →</a>
   </div>
 </nav>
@@ -938,6 +1231,8 @@ footer {
         <div class="cat-item-name">VOID TEE</div>
         <div class="cat-item-sub">Oversized · S/M/L/XL</div>
         <div class="cat-item-price">$18.500</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select>
+        <button class="add-to-cart" onclick="addToCart('VOID TEE', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
     <div class="cat-item">
@@ -946,6 +1241,8 @@ footer {
         <div class="cat-item-name">STATIC HOODIE</div>
         <div class="cat-item-sub">Unisex · S al XL</div>
         <div class="cat-item-price">$42.000</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select>
+        <button class="add-to-cart" onclick="addToCart('STATIC HOODIE', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
     <div class="cat-item">
@@ -954,6 +1251,8 @@ footer {
         <div class="cat-item-name">CARGO PANT</div>
         <div class="cat-item-sub">Técnico · 28 al 36</div>
         <div class="cat-item-price">$38.000</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option></select>
+        <button class="add-to-cart" onclick="addToCart('CARGO PANT', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
     <div class="cat-item">
@@ -962,6 +1261,8 @@ footer {
         <div class="cat-item-name">HARDWARE CAP</div>
         <div class="cat-item-sub">Ajustable · Unisex</div>
         <div class="cat-item-price">$14.000</div>
+        <input type="hidden" class="size-select" value="Única">
+        <button class="add-to-cart" onclick="addToCart('HARDWARE CAP', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
   </div>
@@ -973,6 +1274,8 @@ footer {
         <div class="cat-item-name">VOID TEE</div>
         <div class="cat-item-sub">Oversized · S/M/L/XL</div>
         <div class="cat-item-price">$18.500</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select>
+        <button class="add-to-cart" onclick="addToCart('VOID TEE', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
     <div class="cat-item">
@@ -981,6 +1284,8 @@ footer {
         <div class="cat-item-name">STATIC LONGSLEEVE</div>
         <div class="cat-item-sub">Regular · S/M/L</div>
         <div class="cat-item-price">$22.000</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="S">S</option><option value="M">M</option><option value="L">L</option></select>
+        <button class="add-to-cart" onclick="addToCart('STATIC LONGSLEEVE', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
   </div>
@@ -992,6 +1297,8 @@ footer {
         <div class="cat-item-name">STATIC HOODIE</div>
         <div class="cat-item-sub">Unisex · S al XL</div>
         <div class="cat-item-price">$42.000</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select>
+        <button class="add-to-cart" onclick="addToCart('STATIC HOODIE', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
     <div class="cat-item">
@@ -1000,6 +1307,8 @@ footer {
         <div class="cat-item-name">CREWNECK VOID</div>
         <div class="cat-item-sub">Unisex · S al XL</div>
         <div class="cat-item-price">$36.000</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option></select>
+        <button class="add-to-cart" onclick="addToCart('CREWNECK VOID', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
   </div>
@@ -1011,6 +1320,8 @@ footer {
         <div class="cat-item-name">CARGO PANT</div>
         <div class="cat-item-sub">Técnico · 28 al 36</div>
         <div class="cat-item-price">$38.000</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option><option value="36">36</option></select>
+        <button class="add-to-cart" onclick="addToCart('CARGO PANT', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
     <div class="cat-item">
@@ -1019,6 +1330,8 @@ footer {
         <div class="cat-item-name">WIDE LEG</div>
         <div class="cat-item-sub">Denim · 28 al 34</div>
         <div class="cat-item-price">$44.000</div>
+        <select class="size-select"><option value="" disabled selected>TALLE</option><option value="28">28</option><option value="30">30</option><option value="32">32</option><option value="34">34</option></select>
+        <button class="add-to-cart" onclick="addToCart('WIDE LEG', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
   </div>
@@ -1030,6 +1343,8 @@ footer {
         <div class="cat-item-name">HARDWARE CAP</div>
         <div class="cat-item-sub">Ajustable · Unisex</div>
         <div class="cat-item-price">$14.000</div>
+        <input type="hidden" class="size-select" value="Única">
+        <button class="add-to-cart" onclick="addToCart('HARDWARE CAP', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
     <div class="cat-item">
@@ -1038,6 +1353,8 @@ footer {
         <div class="cat-item-name">TOTE KRUX</div>
         <div class="cat-item-sub">Canvas · Única</div>
         <div class="cat-item-price">$9.500</div>
+        <input type="hidden" class="size-select" value="Única">
+        <button class="add-to-cart" onclick="addToCart('TOTE KRUX', this)">+ AGREGAR AL CARRITO</button>
       </div>
     </div>
   </div>
@@ -1131,5 +1448,172 @@ footer {
   }, { threshold: 0.07 });
   document.querySelectorAll('.fade-in').forEach(el => obs.observe(el));
 </script>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- CART DRAWER -->
+<div class="cart-drawer" id="cartDrawer">
+  <div class="cart-header">
+    <div class="cart-header-title">MI <span>CARRITO</span></div>
+    <button class="cart-close" onclick="toggleCart()">✕</button>
+  </div>
+  <div class="cart-body" id="cartBody">
+    <div class="cart-empty" id="cartEmpty">
+      <div class="cart-empty-icon">🛒</div>
+      <div class="cart-empty-text">TU CARRITO ESTÁ VACÍO</div>
+      <div style="font-family:'Space Mono',monospace;font-size:10px;color:var(--humo);letter-spacing:0.1em;">AGREGÁ ALGO DEL CATÁLOGO</div>
+    </div>
+    <div id="cartItems"></div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total-row">
+      <div class="cart-total-label">Total</div>
+      <div class="cart-total-price" id="cartTotal">$0</div>
+    </div>
+    <button class="cart-checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>
+      <span>💬</span> PEDIR POR WHATSAPP
+    </button>
+    <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--humo);letter-spacing:0.08em;text-align:center;margin-top:0.75rem;line-height:1.6;">
+      Te enviamos el detalle por WhatsApp y coordinamos el pago y envío.
+    </div>
+  </div>
+</div>
+
+<script>
+// ── PRODUCT DATA ──
+const PRODUCTS = {
+  'VOID TEE':          { price: 18500, emoji: '👕', sizes: ['S','M','L','XL'] },
+  'STATIC HOODIE':     { price: 42000, emoji: '🧥', sizes: ['S','M','L','XL'] },
+  'CARGO PANT':        { price: 38000, emoji: '👖', sizes: ['28','30','32','34','36'] },
+  'HARDWARE CAP':      { price: 14000, emoji: '🧢', sizes: ['Única'] },
+  'STATIC LONGSLEEVE': { price: 22000, emoji: '👕', sizes: ['S','M','L'] },
+  'CREWNECK VOID':     { price: 36000, emoji: '🧥', sizes: ['S','M','L','XL'] },
+  'WIDE LEG':          { price: 44000, emoji: '👖', sizes: ['28','30','32','34'] },
+  'TOTE KRUX':         { price: 9500,  emoji: '👜', sizes: ['Única'] },
+};
+
+let cart = {};
+
+// ── CART TOGGLE ──
+function toggleCart() {
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+  document.body.style.overflow = document.getElementById('cartDrawer').classList.contains('open') ? 'hidden' : '';
+}
+
+// ── ADD TO CART ──
+function addToCart(name, btn) {
+  const card = btn.closest('.cat-item');
+  const select = card.querySelector('.size-select');
+  const size = select ? select.value : 'Única';
+  const product = PRODUCTS[name];
+  if (!product) return;
+
+  const key = name + '|' + size;
+  if (cart[key]) {
+    cart[key].qty++;
+  } else {
+    cart[key] = { name, size, price: product.price, emoji: product.emoji, qty: 1 };
+  }
+
+  // Flash
+  btn.textContent = '✓ AGREGADO';
+  btn.classList.add('added');
+  card.classList.add('flash');
+  setTimeout(() => {
+    btn.textContent = '+ AGREGAR AL CARRITO';
+    btn.classList.remove('added');
+    card.classList.remove('flash');
+  }, 1200);
+
+  renderCart();
+  updateCount();
+}
+
+// ── REMOVE FROM CART ──
+function removeFromCart(key) {
+  delete cart[key];
+  renderCart();
+  updateCount();
+}
+
+// ── CHANGE QTY ──
+function changeQty(key, delta) {
+  if (!cart[key]) return;
+  cart[key].qty += delta;
+  if (cart[key].qty <= 0) delete cart[key];
+  renderCart();
+  updateCount();
+}
+
+// ── RENDER CART ──
+function renderCart() {
+  const items = Object.entries(cart);
+  const empty = document.getElementById('cartEmpty');
+  const itemsEl = document.getElementById('cartItems');
+  const checkoutBtn = document.getElementById('checkoutBtn');
+
+  empty.style.display = items.length === 0 ? 'flex' : 'none';
+
+  itemsEl.innerHTML = items.map(([key, item]) => `
+    <div class="cart-item">
+      <div class="cart-item-emoji">${item.emoji}</div>
+      <div class="cart-item-info">
+        <div class="cart-item-name">${item.name}</div>
+        <div class="cart-item-meta">TALLE: ${item.size}</div>
+        <div class="cart-item-price">${formatPrice(item.price * item.qty)}</div>
+        <div class="cart-item-controls">
+          <button class="qty-btn" onclick="changeQty('${key}', -1)">−</button>
+          <span class="qty-num">${item.qty}</span>
+          <button class="qty-btn" onclick="changeQty('${key}', 1)">+</button>
+        </div>
+      </div>
+      <button class="cart-remove" onclick="removeFromCart('${key}')" title="Eliminar">✕</button>
+    </div>
+  `).join('');
+
+  const total = items.reduce((s, [, i]) => s + i.price * i.qty, 0);
+  document.getElementById('cartTotal').textContent = formatPrice(total);
+  checkoutBtn.disabled = items.length === 0;
+}
+
+// ── UPDATE NAV COUNT ──
+function updateCount() {
+  const total = Object.values(cart).reduce((s, i) => s + i.qty, 0);
+  const el = document.getElementById('cartCount');
+  el.textContent = total;
+  el.classList.toggle('visible', total > 0);
+}
+
+// ── FORMAT PRICE ──
+function formatPrice(n) {
+  return '$' + n.toLocaleString('es-AR');
+}
+
+// ── WHATSAPP CHECKOUT ──
+function checkout() {
+  const items = Object.values(cart);
+  if (!items.length) return;
+
+  const lines = items.map(i =>
+    `• ${i.name} (Talle ${i.size}) x${i.qty} — ${formatPrice(i.price * i.qty)}`
+  ).join('%0A');
+
+  const total = items.reduce((s, i) => s + i.price * i.qty, 0);
+  const msg = `Hola KRUX! Quiero hacer el siguiente pedido:%0A%0A${lines}%0A%0ATOTAL: ${formatPrice(total)}%0A%0ACoordinar envío y forma de pago.`;
+
+  window.open(`https://wa.me/5491100000000?text=${msg}`, '_blank');
+}
+
+// ── CLOSE ON ESC ──
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    const drawer = document.getElementById('cartDrawer');
+    if (drawer.classList.contains('open')) toggleCart();
+  }
+});
+</script>
+
 </body>
 </html>
